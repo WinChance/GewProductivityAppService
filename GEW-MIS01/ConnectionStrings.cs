@@ -9,6 +9,7 @@ namespace GEW_MIS01
     public static class ConnectionStrings
     {
         // 测试数据库账号
+        public static string PdmDbConnectionString = @"Data Source=gew-mis01uat;database=PDMDB;uid=test;pwd=ittest;";
         // YDMDB数据库：账号密码
         public static string YdmDbConnectionString = @"Data Source=gew-mis01uat;database=YDMDB;uid=test;pwd=ittest;";
 
