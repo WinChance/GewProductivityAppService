@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace GewProductivityAppService.ViewModels.YdService.CageStatusTrace
+﻿namespace GewProductivityAppService.Models.YdService.SarongStatus
 {
     /// <summary>
     /// 产量录入对象

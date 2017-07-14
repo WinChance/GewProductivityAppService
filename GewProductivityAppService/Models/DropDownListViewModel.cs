@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace GewProductivityAppService.ViewModels
+namespace GewProductivityAppService.Models
 {
     /// <summary>
     /// 通用对象，用于菜单表和下拉列表

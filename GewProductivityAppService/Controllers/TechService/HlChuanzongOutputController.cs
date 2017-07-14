@@ -5,8 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
-using GewProductivityAppService.ViewModels;
-using GewProductivityAppService.ViewModels.TechService;
+using System.Web.WebPages;
+using GewProductivityAppService.Models;
+using GewProductivityAppService.Models.Common;
+using GewProductivityAppService.Models.TechService;
+using GewProductivityAppService.Models.TechService.HlChuanzongOutput;
 using Microsoft.Ajax.Utilities;
 using PDMDB;
 using YDMDB;
@@ -16,6 +19,7 @@ namespace GewProductivityAppService.Controllers.TechService
     /// <summary>
     /// HL穿综产量APP
     /// </summary>
+    [RoutePrefix("api/Tech")]
     public class HlChuanzongOutputController : ApiController
     {
         private PdmDbContext PdmDb = new PdmDbContext();
@@ -25,28 +29,33 @@ namespace GewProductivityAppService.Controllers.TechService
         /// </summary>
         /// <param name="hlNo"></param>
         /// <returns></returns>
-        [Route("GetGfNoByMachineName")]
+        [Route("hlBasicInfoes/GetScores")]
         [HttpGet]
-        public HttpResponseMessage GetSysScore([FromUri]string hlNo)
+        public IHttpActionResult GetSysScore([FromUri]string hlNo)
         {
             try
             {
-                string gradeCent=PdmDb.hlBasicInfoes.Where(i=>i.HL_No.Equals(hlNo,StringComparison.CurrentCultureIgnoreCase)).Select(i=>i.grade_cent).FirstOrDefault().ToString();
-                if (!gradeCent.IsNullOrWhiteSpace())
+                var firstOrDefault = PdmDb.hlBasicInfoes.Where(i=>i.HL_No.Equals(hlNo,StringComparison.CurrentCultureIgnoreCase)).Select(i=>i.grade_cent).FirstOrDefault();
+                if (firstOrDefault != null)
                 {
-                    HttpResponseMessage responseMessage =
-                        new HttpResponseMessage
-                        {
-                            Content =
-                                new StringContent(gradeCent, Encoding.GetEncoding("UTF-8"),
-                                    "text/plain")
-                        };
-                    return responseMessage;
+                    decimal gradeCent=(decimal) firstOrDefault;
+                    decimal remainScore=gradeCent;
+                    var sum = PdmDb.hlOutputs.Where(o => o.HL_No.Equals(hlNo,StringComparison.CurrentCultureIgnoreCase)).Sum(o => o.Dync_Score);
+                    if (sum != null)
+                    {
+                        remainScore = gradeCent-sum.Value;
 
+                    }
+                  
+                    return Json(new
+                    {
+                        SysScore=gradeCent,
+                        RemainScore=remainScore
+                    });
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                    return NotFound();
                 }
             }
             catch (Exception)
@@ -55,30 +64,13 @@ namespace GewProductivityAppService.Controllers.TechService
                 throw;
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hlNo"></param>
-        /// <returns></returns>
-        [Route("GetNameByClass")]
-        [HttpGet]
-        public IHttpActionResult GetNameByClass([FromUri] string staffClass)
-        {
-            List<DropDownListViewModel> rtnList =
-                PdmDb.hlProductionStaffs.Where(
-                        s => s.Class.Equals(staffClass, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(s => new DropDownListViewModel
-                    {
-                        text1 = s.Name
-                    }).ToList();
-            return Json(rtnList);
-        }
+
         /// <summary>
         /// 输入穿综产量
         /// </summary>
         /// <param name="hlOutput">绑定模型</param>
         /// <returns></returns>
-        [Route("InputHlProduction")]
+        [Route("hlOutput/InputHlProduction")]
         [HttpPost]
         public IHttpActionResult InputHlProduction([FromBody]HlOutputBindModel hlOutput)
         {
@@ -89,10 +81,12 @@ namespace GewProductivityAppService.Controllers.TechService
             var output=new hlOutput()
             {
                 HL_No = hlOutput.HL_No,
-                Sys_Score = hlOutput.Sys_Score,
-                Dync_Score = hlOutput.Dync_Score,
+                Sys_Score = hlOutput.Sys_Score.AsDecimal(),
+                Dync_Score = hlOutput.Dync_Score.AsDecimal(),
                 Class = hlOutput.Class,
-                Name = hlOutput.Name
+                Post = "穿综",
+                Name = hlOutput.Name,
+                IsMore = hlOutput.IsMore.AsInt()
 
             };
             PdmDb.hlOutputs.Add(output);

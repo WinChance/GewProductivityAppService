@@ -13,6 +13,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using GewProductivityAppService.Areas.HelpPage.ModelDescriptions;
 using GewProductivityAppService.Areas.HelpPage.Models;
+using GewProductivityAppService.Areas.HelpPage.SampleGeneration;
 
 namespace GewProductivityAppService.Areas.HelpPage
 {

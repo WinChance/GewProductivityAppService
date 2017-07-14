@@ -1,5 +1,6 @@
 using System.Web.Http;
 using System.Web.Mvc;
+using GewProductivityAppService.Areas.HelpPage.App_Start;
 
 namespace GewProductivityAppService.Areas.HelpPage
 {

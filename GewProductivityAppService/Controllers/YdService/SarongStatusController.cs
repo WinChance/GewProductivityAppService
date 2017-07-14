@@ -5,14 +5,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.WebPages;
-using GewProductivityAppService.Util;
-using GewProductivityAppService.ViewModels.YdService.CageStatusTrace;
+using GewProductivityAppService.Models.YdService.SarongStatus;
 using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
 using YDMDB;
 using Z.EntityFramework.Plus;
 
-namespace GewProductivityAppService.Controllers.YdService.CageStatusTrace
+namespace GewProductivityAppService.Controllers.YdService
 {
     /// <summary>
     /// 染纱染台笼子状态跟踪
@@ -50,7 +48,7 @@ namespace GewProductivityAppService.Controllers.YdService.CageStatusTrace
         [HttpPost]
         public IHttpActionResult InputRtProduction([FromBody]RtProductionBindModel rtProduction)
         {
-
+            // 将null替换为""
             foreach (var _rtProductionin in rtProduction.GetType().GetProperties())
             {
                 if (_rtProductionin.GetValue(rtProduction) == null)
