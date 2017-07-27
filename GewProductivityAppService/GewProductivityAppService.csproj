@@ -65,6 +65,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -175,10 +176,19 @@
     <Compile Include="Controllers\Manage\CommonController.cs" />
     <Compile Include="Controllers\TechService\HlChuanzongOutputController.cs" />
     <Compile Include="Controllers\YdService\SarongStatusController.cs" />
+    <Compile Include="DAL\ConnectionStrings.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\hlBasicInfo.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\hlOutput.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\hlProductionStaff.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\Pattern2HL.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\PdmDbContext.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\prdAppSarong.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\rtProduction.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\YdmDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Common\DropDownListBindingModel.cs" />
+    <Compile Include="Models\Common\UspParamBindingModel.cs" />
     <Compile Include="Models\Common\ItemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\InitAPI.cs" />
@@ -254,16 +264,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PDMDB\PDMDB.csproj">
-      <Project>{07d6102b-5546-4063-a99b-ff597463fb70}</Project>
-      <Name>PDMDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YDMDB\YDMDB.csproj">
-      <Project>{4c525d03-bc07-4dee-88bf-9525c6172b03}</Project>
-      <Name>YDMDB</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

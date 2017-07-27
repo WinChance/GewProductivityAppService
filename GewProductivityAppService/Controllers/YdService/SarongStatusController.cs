@@ -5,9 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.WebPages;
+using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models.YdService.SarongStatus;
 using Microsoft.Ajax.Utilities;
-using YDMDB;
 using Z.EntityFramework.Plus;
 
 namespace GewProductivityAppService.Controllers.YdService
@@ -34,7 +34,14 @@ namespace GewProductivityAppService.Controllers.YdService
                 SqlParameter[] sqlParameter = new SqlParameter[1];
                 sqlParameter[0] = new SqlParameter("@jarType", batchType);
                 var result = YdmDb.Database.SqlQuery<SarongStatusViewModel>("EXEC dbo.usp_prdAppGetSarongStatusByJarType @jarType", sqlParameter).ToList();
-                return Json(result);
+                if (result.Count>0)
+                {
+                    return Json(result);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             return BadRequest();
         }
@@ -57,6 +64,9 @@ namespace GewProductivityAppService.Controllers.YdService
                 }
             }
             List<SqlParameter> paramArray = new List<SqlParameter>();
+            SqlParameter rtnStatus = new SqlParameter("@RtnStatus", SqlDbType.Int);
+            rtnStatus.Direction = ParameterDirection.Output;
+            paramArray.Add(rtnStatus);
             paramArray.Add(new SqlParameter("@BatchNo", rtProduction.BatchNo));
             paramArray.Add(new SqlParameter("@SarongNO", rtProduction.SarongNO));
             paramArray.Add(new SqlParameter("@InputClass", rtProduction.InputClass));
@@ -64,20 +74,18 @@ namespace GewProductivityAppService.Controllers.YdService
             paramArray.Add(new SqlParameter("@Inputer_ID", rtProduction.InputerID));
             paramArray.Add(new SqlParameter("@YieldNum", rtProduction.YieldNum.AsDecimal()));
             paramArray.Add(new SqlParameter("@Department", rtProduction.Department));
-            SqlParameter param = new SqlParameter("@RtnStatus", SqlDbType.Int);
-            param.Direction = ParameterDirection.Output;
-            paramArray.Add(param);
+            paramArray.Add(new SqlParameter("@PayType", rtProduction.PayType));
+            paramArray.Add(new SqlParameter("@Way", rtProduction.Way));
             try
             {
-                YdmDb.Database.ExecuteSqlCommand(@"EXEC dbo.usp_prdAppInputRtProduction @BatchNo ,@SarongNO ,@InputClass ,@Work_ID ,@Inputer_ID,@YieldNum,@Department,@RtnStatus out",
+                YdmDb.Database.ExecuteSqlCommand(@"EXEC dbo.usp_prdAppInputRtProduction @BatchNo ,@SarongNO ,@InputClass ,@Work_ID ,@Inputer_ID,@YieldNum,@Department,@PayType,@Way,@RtnStatus out",
                     paramArray.ToArray());
             }
             catch (Exception)
             {
-
                 throw;
             }
-            int result = (int)paramArray[7].Value;
+            int result = (int)paramArray[0].Value;
             if (result > 0)
             {
                 return Ok();
@@ -104,6 +112,12 @@ namespace GewProductivityAppService.Controllers.YdService
             YdmDb.prdAppSarongs.Where(s => s.SarongNo.Equals(sarongNo, StringComparison.CurrentCultureIgnoreCase)).Update(s => new prdAppSarong { IsUsed = "否" });
             YdmDb.SaveChanges();
             return Ok();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            YdmDb.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

@@ -1,23 +1,27 @@
 ﻿namespace GewProductivityAppService.Models.Common
 {
-    public class DropDownListBindingModel
+
+    public class UspParamBindingModel
     {
         /// <summary>
-        /// 下拉项
+        /// 必须
         /// </summary>
         public string param1 { get; set; }
         /// <summary>
-        /// 
+        /// 可选
         /// </summary>
         public string param2 { get; set; }
         /// <summary>
-        /// 班别
+        /// 可选
         /// </summary>
         public string param3 { get; set; }
         /// <summary>
-        /// 工人类型 WorkerType
+        /// 可选
         /// </summary>
         public string param4 { get; set; }
+        /// <summary>
+        /// 可选
+        /// </summary>
         public string param5 { get; set; }
     }
 }

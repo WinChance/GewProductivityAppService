@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Web.Http;
 using System.Web.WebPages;
-using GewProductivityAppService.Models;
-using GewProductivityAppService.Models.Common;
-using GewProductivityAppService.Models.TechService;
+using GewProductivityAppService.DAL.MIS01.PDMDB;
 using GewProductivityAppService.Models.TechService.HlChuanzongOutput;
-using Microsoft.Ajax.Utilities;
-using PDMDB;
-using YDMDB;
+
 
 namespace GewProductivityAppService.Controllers.TechService
 {
@@ -23,7 +15,7 @@ namespace GewProductivityAppService.Controllers.TechService
     public class HlChuanzongOutputController : ApiController
     {
         private PdmDbContext PdmDb = new PdmDbContext();
-       
+
         /// <summary>
         /// 根据HL_NO，返回系统分数
         /// </summary>
@@ -35,32 +27,31 @@ namespace GewProductivityAppService.Controllers.TechService
         {
             try
             {
-                var firstOrDefault = PdmDb.hlBasicInfoes.Where(i=>i.HL_No.Equals(hlNo,StringComparison.CurrentCultureIgnoreCase)).Select(i=>i.grade_cent).FirstOrDefault();
-                if (firstOrDefault != null)
+                // 系统分=基础分+飞穿分
+                var sqlText = @"SELECT ISNULL(C.InputScore,0)+ISNULL(b.HealdingScore,0) AS SysCalScore  From Pattern2HL A with(nolock) 
+Inner Join hlBasicInfo B with(nolock) On A.strHLNo=B.HL_NO 
+Inner Join hlUnHealdingScore C with(nolock) On A.strLBNo=C.LB_No 
+                                          And B.Suggestion_Reed = C.Suggestion_Reed 
+                                          And B.Drawing = C.Drawing 
+Where A.strHLNo=@p0";
+                // 系统分计算
+                decimal sysCalScore = PdmDb.Database.SqlQuery<decimal>(sqlText, hlNo).FirstOrDefault();
+                // 余下分数
+                decimal remainScore = sysCalScore;
+                // 计算该HL_NO已完成的分数和
+                var sum = PdmDb.hlOutputs.Where(o => o.HL_No.Equals(hlNo, StringComparison.CurrentCultureIgnoreCase)).Sum(o => o.Dync_Score);
+                if (sum != null)
                 {
-                    decimal gradeCent=(decimal) firstOrDefault;
-                    decimal remainScore=gradeCent;
-                    var sum = PdmDb.hlOutputs.Where(o => o.HL_No.Equals(hlNo,StringComparison.CurrentCultureIgnoreCase)).Sum(o => o.Dync_Score);
-                    if (sum != null)
-                    {
-                        remainScore = gradeCent-sum.Value;
-
-                    }
-                  
-                    return Json(new
-                    {
-                        SysScore=gradeCent,
-                        RemainScore=remainScore
-                    });
+                    remainScore = (sysCalScore - sum.Value) <= 0 ? 0 : (sysCalScore - sum.Value);
                 }
-                else
+                return Json(new
                 {
-                    return NotFound();
-                }
+                    SysScore = sysCalScore,
+                    RemainScore = remainScore
+                });
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -74,25 +65,29 @@ namespace GewProductivityAppService.Controllers.TechService
         [HttpPost]
         public IHttpActionResult InputHlProduction([FromBody]HlOutputBindModel hlOutput)
         {
-            if (hlOutput==null)
+            if (hlOutput == null)
             {
                 return BadRequest();
             }
-            var output=new hlOutput()
+            var output = new hlOutput()
             {
-                HL_No = hlOutput.HL_No,
+                HL_No = hlOutput.HL_No.ToUpper(),
                 Sys_Score = hlOutput.Sys_Score.AsDecimal(),
                 Dync_Score = hlOutput.Dync_Score.AsDecimal(),
-                Class = hlOutput.Class,
+                Class = hlOutput.Class.ToUpper(),
                 Post = "穿综",
                 Name = hlOutput.Name,
-                IsMore = hlOutput.IsMore.AsInt()
-
+                //IsMore = hlOutput.IsMore.AsInt(),
+                InputTime = DateTime.Now
             };
             PdmDb.hlOutputs.Add(output);
             PdmDb.SaveChanges();
             return Ok();
         }
-
+        protected override void Dispose(bool disposing)
+        {
+            PdmDb.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

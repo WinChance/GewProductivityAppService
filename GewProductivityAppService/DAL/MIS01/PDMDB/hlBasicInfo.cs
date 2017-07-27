@@ -1,11 +1,9 @@
-namespace PDMDB
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace GewProductivityAppService.DAL.MIS01.PDMDB
+{
     [Table("hlBasicInfo")]
     public partial class hlBasicInfo
     {
@@ -226,5 +224,8 @@ namespace PDMDB
 
         [Column(TypeName = "numeric")]
         public decimal? Cale_Width { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? HealdingScore { get; set; }
     }
 }

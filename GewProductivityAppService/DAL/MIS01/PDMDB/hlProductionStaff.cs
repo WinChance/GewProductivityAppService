@@ -1,11 +1,8 @@
-namespace PDMDB
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace GewProductivityAppService.DAL.MIS01.PDMDB
+{
     [Table("hlProductionStaff")]
     public partial class hlProductionStaff
     {

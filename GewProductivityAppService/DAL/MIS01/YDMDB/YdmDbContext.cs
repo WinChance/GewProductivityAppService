@@ -1,14 +1,11 @@
-namespace YDMDB
-{
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
+using System.Data.Entity;
 
+namespace GewProductivityAppService.DAL.MIS01.YDMDB
+{
     public partial class YdmDbContext : DbContext
     {
         public YdmDbContext()
-            : base(GEW_MIS01.ConnectionStrings.YdmDbConnectionString)
+            : base(ConnectionStrings.YdmDbConnectionString)
         {
             // 需要在EF 4.3上关闭数据库初始化策略
             Database.SetInitializer<YdmDbContext>(null);
