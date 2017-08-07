@@ -12,8 +12,8 @@
       
         public string Department { get; set; }
 
-     
-        public string JarType { get; set; }
+
+        public string BatchType { get; set; }
 
         public int? CountOfCategory { get; set; }
 

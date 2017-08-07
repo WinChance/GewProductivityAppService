@@ -20,7 +20,7 @@ namespace GewProductivityAppService.DAL.MIS01.YDMDB
 
         [Required]
         [StringLength(10)]
-        public string JarType { get; set; }
+        public string BatchType { get; set; }
 
         public int? CountOfCategory { get; set; }
 

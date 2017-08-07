@@ -32,8 +32,8 @@ namespace GewProductivityAppService.Controllers.YdService
             if (batchType != null)
             {
                 SqlParameter[] sqlParameter = new SqlParameter[1];
-                sqlParameter[0] = new SqlParameter("@jarType", batchType);
-                var result = YdmDb.Database.SqlQuery<SarongStatusViewModel>("EXEC dbo.usp_prdAppGetSarongStatusByJarType @jarType", sqlParameter).ToList();
+                sqlParameter[0] = new SqlParameter("@batchType", batchType);
+                var result = YdmDb.Database.SqlQuery<SarongStatusViewModel>("EXEC dbo.usp_prdAppGetSarongStatusByBatchType @batchType", sqlParameter).ToList();
                 if (result.Count>0)
                 {
                     return Json(result);

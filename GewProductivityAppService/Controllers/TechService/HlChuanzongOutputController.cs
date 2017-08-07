@@ -27,13 +27,25 @@ namespace GewProductivityAppService.Controllers.TechService
         {
             try
             {
+                string sqlText;
+                if (!hlNo.ToUpper().Contains("HL"))
+                {
+                    int _nAutoID = Convert.ToInt32(hlNo);
+                    hlNo = PdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
+                }
                 // 系统分=基础分+飞穿分
-                var sqlText = @"SELECT ISNULL(C.InputScore,0)+ISNULL(b.HealdingScore,0) AS SysCalScore  From Pattern2HL A with(nolock) 
+                sqlText = @"
+DECLARE @HL_NO VARCHAR(30)=@p0
+Select ISNULL(C.InputScore,0) AS SysScore INTO #Tb1 FROM Pattern2HL A with(nolock) 
 Inner Join hlBasicInfo B with(nolock) On A.strHLNo=B.HL_NO 
 Inner Join hlUnHealdingScore C with(nolock) On A.strLBNo=C.LB_No 
                                           And B.Suggestion_Reed = C.Suggestion_Reed 
                                           And B.Drawing = C.Drawing 
-Where A.strHLNo=@p0";
+Where A.strHLNo=@HL_NO
+UNION ALL
+SELECT ISNULL(a.HealdingScore,0)AS SysScore FROM dbo.hlBasicInfo AS a WHERE a.HL_No=@HL_NO
+SELECT SUM(a.SysScore) FROM #Tb1 AS a
+DROP TABLE #Tb1";
                 // 系统分计算
                 decimal sysCalScore = PdmDb.Database.SqlQuery<decimal>(sqlText, hlNo).FirstOrDefault();
                 // 余下分数
@@ -69,15 +81,22 @@ Where A.strHLNo=@p0";
             {
                 return BadRequest();
             }
+            string hlNo = hlOutput.HL_No.ToUpper();
+            // 当提交的HL_NO是条码扫描值，转换为HL_NO
+            if (!hlNo.Contains("HL"))
+            {
+                int _nAutoID = Convert.ToInt32(hlNo);
+                hlNo = PdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
+            }
             var output = new hlOutput()
             {
-                HL_No = hlOutput.HL_No.ToUpper(),
+                HL_No = hlNo,
                 Sys_Score = hlOutput.Sys_Score.AsDecimal(),
                 Dync_Score = hlOutput.Dync_Score.AsDecimal(),
                 Class = hlOutput.Class.ToUpper(),
                 Post = "穿综",
                 Name = hlOutput.Name,
-                //IsMore = hlOutput.IsMore.AsInt(),
+                Remark = "输入人："+hlOutput.Remark,// 记录APP登录人
                 InputTime = DateTime.Now
             };
             PdmDb.hlOutputs.Add(output);
