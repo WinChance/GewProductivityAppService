@@ -24,16 +24,19 @@ namespace GewProductivityAppService.Controllers.YdService
         /// 查询纱笼状态
         /// </summary>
         /// <param name="batchType">缸型</param>
+        /// <param name="sarongType">笼的类型：纱笼/轴笼</param>
         /// <returns></returns>
         [Route("GetSarongStatusByBatchType")]
         [HttpGet]
-        public IHttpActionResult GetSarongStatusByJarType([FromUri] string batchType)
+        public IHttpActionResult GetSarongStatusByBatchType([FromUri] string batchType, string sarongType)
         {
-            if (batchType != null)
+            if (batchType != null && sarongType!=null)
             {
-                SqlParameter[] sqlParameter = new SqlParameter[1];
+                SqlParameter[] sqlParameter = new SqlParameter[2];
                 sqlParameter[0] = new SqlParameter("@batchType", batchType);
-                var result = YdmDb.Database.SqlQuery<SarongStatusViewModel>("EXEC dbo.usp_prdAppGetSarongStatusByBatchType @batchType", sqlParameter).ToList();
+                sqlParameter[1] = new SqlParameter("@sarongType", sarongType);
+
+                var result = YdmDb.Database.SqlQuery<SarongStatusViewModel>("EXEC dbo.usp_prdAppGetSarongStatusByBatchType @batchType,@sarongType", sqlParameter).ToList();
                 if (result.Count>0)
                 {
                     return Json(result);
@@ -104,7 +107,7 @@ namespace GewProductivityAppService.Controllers.YdService
         [HttpPut]
         public IHttpActionResult UnLoadSarong([FromUri]string batchNo)
         {
-            string sarongNo = YdmDb.rtProductions.Where(p => p.Batch_NO.Equals(batchNo, StringComparison.CurrentCultureIgnoreCase) && p.Type.Equals("装笼")).Select(p => p.Sarong_No).FirstOrDefault();
+            string sarongNo = YdmDb.rtProductions.Where(p => p.Batch_NO.Equals(batchNo, StringComparison.CurrentCultureIgnoreCase) && p.Type.Equals("装笼")).OrderByDescending(p=>p.Input_Time).Select(p => p.Sarong_No).FirstOrDefault();
             if (sarongNo.IsNullOrWhiteSpace())
             {
                 return BadRequest();
