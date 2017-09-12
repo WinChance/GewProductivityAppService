@@ -1,12 +1,16 @@
-﻿namespace GewProductivityAppService.Models.Common
-{
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
-    public class UspParamBindingModel
+namespace GewProductivityAppService.Models.Common
+{
+    public class GeneralQueryBindModel
     {
         /// <summary>
-        /// 必须
+        /// 查询类型，必须
         /// </summary>
-        public string param1 { get; set; }
+        public string type { get; set; }
         /// <summary>
         /// 可选
         /// </summary>

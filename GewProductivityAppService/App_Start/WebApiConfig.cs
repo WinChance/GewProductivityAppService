@@ -1,5 +1,7 @@
-﻿using System.Net.Http.Formatting;
+﻿using System.Globalization;
+using System.Net.Http.Formatting;
 using System.Web.Http;
+using Newtonsoft.Json.Converters;
 
 namespace GewProductivityAppService
 {
@@ -17,15 +19,15 @@ namespace GewProductivityAppService
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
             //默认返回 json  
             GlobalConfiguration.Configuration.Formatters
                 .JsonFormatter.MediaTypeMappings.Add(
                 new QueryStringMapping("datatype", "json", "application/json"));
-            //返回格式选择  
-            //GlobalConfiguration.Configuration.Formatters
-            //    .XmlFormatter.MediaTypeMappings.Add(
-            //    new QueryStringMapping("datatype", "xml", "application/xml"));
-            //InitAPI.Init(config);
+
+            
+            config.Filters.Add(new WebApiExceptionFilterAttribute());
+           
         }
     }
 }

@@ -48,7 +48,11 @@ namespace GewProductivityAppService.Controllers.YdService
             }
             return BadRequest();
         }
-
+        /*
+         todo:修改存储过程，增加一个yiedtype参数
+         * map.put("Department",inputfactory.getText().toString());
+map.put("yiedtype",inputyiedtype.getText().toString()); 
+         */
         /// <summary>
         /// 装纱产量录入
         /// </summary>
@@ -116,7 +120,10 @@ namespace GewProductivityAppService.Controllers.YdService
             YdmDb.SaveChanges();
             return Ok();
         }
-
+        /// <summary>
+        /// 回收
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             YdmDb.Dispose();

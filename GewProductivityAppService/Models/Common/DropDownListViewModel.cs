@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GewProductivityAppService.Models
+namespace GewProductivityAppService.Models.Common
 {
     /// <summary>
     /// 通用对象，用于菜单表和下拉列表

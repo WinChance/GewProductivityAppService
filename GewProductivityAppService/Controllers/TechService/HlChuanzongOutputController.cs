@@ -36,16 +36,16 @@ namespace GewProductivityAppService.Controllers.TechService
                 // 系统分=基础分+飞穿分
                 sqlText = @"
 DECLARE @HL_NO VARCHAR(30)=@p0
-Select ISNULL(C.InputScore,0) AS SysScore INTO #Tb1 FROM Pattern2HL A with(nolock) 
-Inner Join hlBasicInfo B with(nolock) On A.strHLNo=B.HL_NO 
-Inner Join hlUnHealdingScore C with(nolock) On A.strLBNo=C.LB_No 
-                                          And B.Suggestion_Reed = C.Suggestion_Reed 
-                                          And B.Drawing = C.Drawing 
-Where A.strHLNo=@HL_NO
+SELECT SUM(c.Score) AS 'SysScore' FROM
+(Select ISNULL(C.InputScore,0) AS 'Score' From Pattern2HL A with(nolock) 
+                   Inner Join hlBasicInfo B with(nolock) On A.strHLNo=B.HL_NO 
+                   Inner Join hlUnHealdingScore C with(nolock) On B.Drawing = C.Drawing 
+                   Where A.strHLNo=@HL_NO 
+				   AND C.TotalEnds=(SELECT a.TotalEnds FROM dbo.hlBasicInfo  AS a  with(nolock)WHERE a.HL_No=@HL_NO)
 UNION ALL
-SELECT ISNULL(a.HealdingScore,0)AS SysScore FROM dbo.hlBasicInfo AS a WHERE a.HL_No=@HL_NO
-SELECT SUM(a.SysScore) FROM #Tb1 AS a
-DROP TABLE #Tb1";
+SELECT    ISNULL(b.HealdingScore,0)
+          FROM      hlBasicInfo AS b with(nolock)
+          WHERE     b.HL_No = @HL_NO)AS c ;";
                 // 系统分计算
                 decimal sysCalScore = PdmDb.Database.SqlQuery<decimal>(sqlText, hlNo).FirstOrDefault();
                 // 余下分数
@@ -96,7 +96,7 @@ DROP TABLE #Tb1";
                 Class = hlOutput.Class.ToUpper(),
                 Post = "穿综",
                 Name = hlOutput.Name,
-                Remark = "输入人："+hlOutput.Remark,// 记录APP登录人
+                Remark = "输入人：" + hlOutput.Remark,// 记录APP登录人
                 InputTime = DateTime.Now
             };
             PdmDb.hlOutputs.Add(output);
