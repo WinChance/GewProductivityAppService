@@ -49,9 +49,8 @@ namespace GewProductivityAppService.Controllers.YdService
             return BadRequest();
         }
         /*
-         todo:修改存储过程，增加一个yiedtype参数
          * map.put("Department",inputfactory.getText().toString());
-map.put("yiedtype",inputyiedtype.getText().toString()); 
+map.put("yieldtype",inputyiedtype.getText().toString()); 
          */
         /// <summary>
         /// 装纱产量录入
@@ -74,6 +73,7 @@ map.put("yiedtype",inputyiedtype.getText().toString());
             SqlParameter rtnStatus = new SqlParameter("@RtnStatus", SqlDbType.Int);
             rtnStatus.Direction = ParameterDirection.Output;
             paramArray.Add(rtnStatus);
+            paramArray.Add(new SqlParameter("@Type", rtProduction.Type));
             paramArray.Add(new SqlParameter("@BatchNo", rtProduction.BatchNo));
             paramArray.Add(new SqlParameter("@SarongNO", rtProduction.SarongNO));
             paramArray.Add(new SqlParameter("@InputClass", rtProduction.InputClass));
@@ -85,7 +85,7 @@ map.put("yiedtype",inputyiedtype.getText().toString());
             paramArray.Add(new SqlParameter("@Way", rtProduction.Way));
             try
             {
-                YdmDb.Database.ExecuteSqlCommand(@"EXEC dbo.usp_prdAppInputRtProduction @BatchNo ,@SarongNO ,@InputClass ,@Work_ID ,@Inputer_ID,@YieldNum,@Department,@PayType,@Way,@RtnStatus out",
+                YdmDb.Database.ExecuteSqlCommand(@"EXEC dbo.usp_prdAppInputRtProduction @Type,@BatchNo ,@SarongNO ,@InputClass ,@Work_ID ,@Inputer_ID,@YieldNum,@Department,@PayType,@Way,@RtnStatus out",
                     paramArray.ToArray());
             }
             catch (Exception)

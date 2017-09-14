@@ -163,6 +163,7 @@ namespace GewProductivityAppService.Controllers.Common
         }
         /// <summary>
         /// 动态查询，参考StackOverflow
+        /// https://stackoverflow.com/questions/26749429/anonymous-type-result-from-sql-query-execution-entity-framework
         /// </summary>
         /// <param name="database"></param>
         /// <param name="sql"></param>

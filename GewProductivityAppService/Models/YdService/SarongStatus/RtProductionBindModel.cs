@@ -5,6 +5,8 @@
     /// </summary>
     public class RtProductionBindModel
     {
+        public string Type { get; set; }
+
         public string BatchNo { get; set; }
 
         public string SarongNO { get; set; }
