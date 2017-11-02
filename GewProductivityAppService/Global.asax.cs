@@ -16,6 +16,9 @@ namespace GewProductivityAppService
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configuration.Filters.Add(new WebApiExceptionFilterAttribute());
+
+            // 自定义事件注册
+            
         }
     }
 }

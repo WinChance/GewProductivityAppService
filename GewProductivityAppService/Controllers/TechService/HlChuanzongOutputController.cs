@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.WebPages;
 using GewProductivityAppService.DAL.MIS01.PDMDB;
+using GewProductivityAppService.DAL.MIS01.WVMDB;
 using GewProductivityAppService.Models.TechService.HlChuanzongOutput;
 
 
@@ -101,11 +102,18 @@ SELECT    ISNULL(b.HealdingScore,0)
             };
             PdmDb.hlOutputs.Add(output);
             PdmDb.SaveChanges();
+
             return Ok();
         }
+
+
         protected override void Dispose(bool disposing)
         {
-            PdmDb.Dispose();
+            if (disposing)
+            {
+                PdmDb.Dispose();
+
+            }
             base.Dispose(disposing);
         }
     }

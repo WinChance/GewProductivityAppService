@@ -103,6 +103,7 @@ namespace GewProductivityAppService.Controllers.Common
             {
                 singleString = YdmDb.Database.SqlQuery<string>("EXEC dbo.usp_prdAppQuerySingleValue @type,@param2,@param3,@param4,@param5",
                    paramArray.ToArray()).FirstOrDefault();
+                
                 HttpResponseMessage responseMessage =
                     new HttpResponseMessage
                     {
@@ -283,6 +284,7 @@ namespace GewProductivityAppService.Controllers.Common
         }
         protected override void Dispose(bool disposing)
         {
+            
             YdmDb.Dispose();
             base.Dispose(disposing);
         }

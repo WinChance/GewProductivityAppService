@@ -1,5 +1,5 @@
 -- 产量表
-SELECT TOP 100 * from PDMDB.dbo.hlOutput    where post='穿综' AND Remark IS NOT NULL AND [Remark] LIKE '输入人%' ORDER BY InputTime DESC
+SELECT TOP 1000 * from PDMDB.dbo.hlOutput    where post='穿综' AND Remark IS NOT NULL AND [Remark] LIKE '输入人%' ORDER BY InputTime DESC
 -- 人员表
 select TOP 10 * from PDMDB.dbo.hlProductionStaff  where Post='穿综'   --人员.
 -- 基础信息表
