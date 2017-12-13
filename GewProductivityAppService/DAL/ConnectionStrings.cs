@@ -21,6 +21,11 @@ namespace GewProductivityAppService.DAL
         /// </summary>
         public static string PdmDbConnectionString = conStr.Replace("master","PDMDB");
 
+
+        /// <summary>
+        /// PDMDB连接字符串，供上下文使用
+        /// </summary>
+        public static string FnmDbConnectionString = conStr.Replace("master", "FNMDB");
         /// <summary>
         /// WVMDB连接字符串，供上下文使用
         /// </summary>

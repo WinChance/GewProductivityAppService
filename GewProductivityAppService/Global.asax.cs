@@ -17,6 +17,7 @@ namespace GewProductivityAppService
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configuration.Filters.Add(new WebApiExceptionFilterAttribute());
 
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(Server.MapPath("Log4net.config")));
             // 自定义事件注册
             
         }

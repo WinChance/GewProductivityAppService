@@ -53,6 +53,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>True</Private>
@@ -162,8 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="DAL\MIS01\Temp\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -200,13 +202,38 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Common\CommonController.cs" />
-    <Compile Include="Controllers\PrService\AbandonYarnController.cs" />
-    <Compile Include="Controllers\PrService\MachineRotateRateController.cs" />
-    <Compile Include="Controllers\TechService\HlChuanzongOutputController.cs" />
-    <Compile Include="Controllers\WvService\VieTaskController.cs" />
-    <Compile Include="Controllers\YdService\SarongStatusController.cs" />
+    <Compile Include="DAL\MIS01\FNMDB\fnHold.cs" />
+    <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
+    <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
+    <Compile Include="DAL\MIS01\FNMDB\UspGetSendInfo.cs" />
+    <Compile Include="DAL\MIS01\Temp\Model1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\MIS01\Temp\Model1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\MIS01\Temp\Model1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\MIS01\Temp\usp_GetSendInfo_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommonProcedureBindModel.cs" />
+    <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBindModel.cs" />
+    <Compile Include="Service\Fn\WuliuController.cs" />
+    <Compile Include="Service\HomeController.cs" />
+    <Compile Include="Service\Common\CommonController.cs" />
+    <Compile Include="Service\Pr\AbandonYarnController.cs" />
+    <Compile Include="Service\Pr\MachineRotateRateController.cs" />
+    <Compile Include="Service\Tech\HlChuanzongOutputController.cs" />
+    <Compile Include="Service\Wv\VieTaskController.cs" />
+    <Compile Include="Service\Yd\SarongStatusController.cs" />
     <Compile Include="DAL\ConnectionStrings.cs" />
     <Compile Include="DAL\MIS01\PDMDB\hlBasicInfo.cs" />
     <Compile Include="DAL\MIS01\PDMDB\hlOutput.cs" />
@@ -225,19 +252,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\WvHubs\VieTaskHub.cs" />
-    <Compile Include="Models\Common\GeneralQueryBindModel.cs" />
+    <Compile Include="Models\GeneralQueryBindModel.cs" />
     <Compile Include="Models\Common\QuerySingleValueBindModel.cs" />
     <Compile Include="Models\Common\UspParamBindModel.cs" />
     <Compile Include="Models\Common\ItemViewModel.cs" />
-    <Compile Include="Models\PrService\AbandonYarn\AbandonYarnBindModel.cs" />
-    <Compile Include="Models\PrService\MachineRotateRate\MachineRotateRateBindModel.cs" />
-    <Compile Include="Models\WvService\VieTask\OrderInfo.cs" />
+    <Compile Include="Models\Pr\AbandonYarn\AbandonYarnBindModel.cs" />
+    <Compile Include="Models\Pr\MachineRotateRate\MachineRotateRateBindModel.cs" />
+    <Compile Include="Models\Wv\VieTask\OrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Common\DropDownListViewModel.cs" />
-    <Compile Include="Models\TechService\HlChuanzongOutput\HlOutputBindModel.cs" />
-    <Compile Include="Models\YdService\SarongStatus\RtProductionBindModel.cs" />
-    <Compile Include="Models\YdService\SarongStatus\SarongStatusViewModel.cs" />
+    <Compile Include="Models\Tech\HlChuanzongOutput\HlOutputBindModel.cs" />
+    <Compile Include="Models\Yd\SarongStatus\RtProductionBindModel.cs" />
+    <Compile Include="Models\Yd\SarongStatus\SarongStatusViewModel.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\DynamicSqlQueryClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -245,6 +273,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="DAL\MIS01\Temp\Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DAL\MIS01\Temp\Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.cs</LastGenOutput>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -275,6 +313,14 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <EntityDeploy Include="DAL\MIS01\Temp\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="DAL\MIS01\Temp\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
+    <Content Include="Log4net.config" />
     <None Include="Properties\PublishProfiles\AppService.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -313,6 +359,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

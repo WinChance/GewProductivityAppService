@@ -1,11 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 
-namespace GewProductivityAppService.DAL.MIS01.Temp
+namespace GewProductivityAppService.DAL.MIS01.PrdAppDB
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-
     public partial class PrdAppDbContext : DbContext
     {
         public PrdAppDbContext()
