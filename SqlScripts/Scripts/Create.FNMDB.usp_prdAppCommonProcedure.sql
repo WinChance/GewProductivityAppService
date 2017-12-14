@@ -24,13 +24,13 @@ GO
    
 ALTER PROCEDURE [dbo].[usp_prdAppCommonProcedure]
 (
-@type NVARCHAR(100)='',
-@param2 NVARCHAR(100) ='',
-@param3 NVARCHAR(100)='',
-@param4 NVARCHAR(100)='',
-@param5 NVARCHAR(100)='',
-@param6 NVARCHAR(100)='',
-@rtnMsg nvarchar(2000) ='success' OUT
+@type VARCHAR(100)='',
+@param2 VARCHAR(100) ='',
+@param3 VARCHAR(100)='',
+@param4 VARCHAR(100)='',
+@param5 VARCHAR(100)='',
+@param6 VARCHAR(100)='',
+@rtnMsg varchar(2000)='' OUT 
 )    
 AS    
 BEGIN    
@@ -56,12 +56,13 @@ SET XACT_ABORT ON;  --执行 Transact-SQL 语句产生运行时错误，则整个事务将终止并回
 BEGIN TRY
 BEGIN TRANSACTION WuliuTran
 --**合并布车**--
-IF(@type='FN101')  
+IF(@type='FN101')
+--@param2:@car_no; @param3:@main_card; @param4:@fn_card; 
+--EXEC [FNMDB].[dbo].[usp_prdAppCommonProcedure] 'FN101','6590(CP02)','test','A17407820' 
 BEGIN
   update  FNMDB..fnJobTraceHdr  set Car_NO=@param2,--@car_no
   labu=@param3--@main_card
   where FN_Card=@param4--@fn_card 
-  
 END
 
 --**合并布车**--
@@ -179,8 +180,16 @@ BEGIN
   --只更新主布车
   update  fnJobTraceHdr  set labu=''  where FN_Card=@param2 
 END
+
+IF(@type='FN107')  --司机确认完成运输活动
+BEGIN
+--EXEC [FNMDB].[dbo].[usp_prdAppCommonProcedure] 'FN107','20171213165135'
+--@param2:@Logisticsno;
+ update fnLogistics set overtime=getdate() where Logisticsno=@param2--@Logisticsno   
+END
 --************************************* END ***************************************--	
 COMMIT TRANSACTION WuliuTran
+SELECT @rtnMsg='success'
 END TRY
 BEGIN CATCH
 	SET @rtnMsg=ERROR_MESSAGE()    --将捕捉到的错误信息存在变量@rtnMsg中               

@@ -198,6 +198,8 @@ namespace GewProductivityAppService.Service.Fn
         /// </summary>
         /// <param name="uspParams"></param>
         /// <returns></returns>
+        [Route("CommonUsp")]
+        [HttpPost]
         public IHttpActionResult CommonUsp([FromUri] CommonProcedureBindModel uspParams)
         {
             foreach (var _uspParam in uspParams.GetType().GetProperties())
@@ -209,7 +211,7 @@ namespace GewProductivityAppService.Service.Fn
             }
             // 传入下拉类别类型
             List<SqlParameter> paramArray = new List<SqlParameter>();
-            SqlParameter param = new SqlParameter("@rtnMsg", SqlDbType.VarChar,2000);
+            SqlParameter param = new SqlParameter("@rtnMsg", SqlDbType.VarChar, 2000);
             param.Direction = ParameterDirection.Output;
             paramArray.Add(param);
             paramArray.Add(new SqlParameter("@type", uspParams.type));
@@ -225,7 +227,7 @@ namespace GewProductivityAppService.Service.Fn
                     "EXEC [dbo].[usp_prdAppCommonProcedure]  @type,@param2,@param3,@param4,@param5,@param6,@rtnMsg out",
                     paramArray.ToArray());
 
-                string rtnMsg = (string)paramArray[0].Value;
+                string rtnMsg = paramArray[0].Value.ToString();
                 if (rtnMsg == "success")
                 {
                     return Ok();
@@ -238,13 +240,8 @@ namespace GewProductivityAppService.Service.Fn
             }
             catch (Exception e)
             {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "存储过程异常"
-                };
                 log.Error(e.Message);
-                throw new HttpResponseException(resp);
+                return BadRequest();
             }
         }
 
