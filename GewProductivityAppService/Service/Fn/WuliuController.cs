@@ -24,7 +24,7 @@ namespace GewProductivityAppService.Service.Fn
     public class WuliuController : ApiController
     {
         private FnmDbContext fnmDb = new FnmDbContext();
-        private static ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         /// <summary>
         /// 取待送布信息
         /// </summary>
@@ -56,10 +56,6 @@ namespace GewProductivityAppService.Service.Fn
                 List<UspGetSendInfo> _listOfGetSendInfos = ((IObjectContextAdapter) fnmDb).ObjectContext
                     .Translate<UspGetSendInfo>(reader).ToList();
 
-                //reader.NextResult();
-                //List<TestModel> _listOfTestModels = ((IObjectContextAdapter) fnmDb).ObjectContext
-                //    .Translate<TestModel>(reader).ToList();
-
                 return Json(_listOfGetSendInfos);
             }
             catch (Exception e)
@@ -82,7 +78,7 @@ namespace GewProductivityAppService.Service.Fn
         /// <param name="operators"></param>
         /// <returns></returns>
         [Route("SaveSendInfo")]
-        [HttpPost]
+        [HttpGet]
         public HttpResponseMessage SaveSendInfo([FromUri]string fnCardList, string destination, string currentDepartment, string operators)
         {
             
@@ -119,27 +115,27 @@ namespace GewProductivityAppService.Service.Fn
         /// <summary>
         /// 保存收布信息
         /// </summary>
-        /// <param name="bm"></param>
+        /// <param name="p"></param>
         /// <returns></returns>
         [Route("SaveReceiveInfo")]
-        [HttpPost]
-        public IHttpActionResult SaveReceiveInfo([FromBody]SaveReceiveInfoBindModel bm)
+        [HttpGet]
+        public IHttpActionResult SaveReceiveInfo([FromUri]SaveReceiveInfoBm p)
         {
-            foreach (var _bm in bm.GetType().GetProperties())
+            foreach (var _uspParam in p.GetType().GetProperties())
             {
-                if (_bm.GetValue(bm) == null)
+                if (_uspParam.GetValue(p) == null)
                 {
-                    _bm.SetValue(bm, "");
+                    _uspParam.SetValue(p, "");
                 }
             }
             List<SqlParameter> paramArray = new List<SqlParameter>();
 
-            paramArray.Add(new SqlParameter("@Note_NO", bm.Note_NO));
-            paramArray.Add(new SqlParameter("@Destination", bm.Destination));
-            paramArray.Add(new SqlParameter("@Operator", bm.Operator));
-            paramArray.Add(new SqlParameter("@Type", bm.Type));
-            paramArray.Add(new SqlParameter("@sNewCarNo", bm.sNewCarNo));
-            paramArray.Add(new SqlParameter("@sNewLocationNo", bm.sNewLocationNo));
+            paramArray.Add(new SqlParameter("@Note_NO", p.Note_NO));
+            paramArray.Add(new SqlParameter("@Destination", p.Destination));
+            paramArray.Add(new SqlParameter("@Operator", p.Operator));
+            paramArray.Add(new SqlParameter("@Type", p.Type));
+            paramArray.Add(new SqlParameter("@sNewCarNo", p.sNewCarNo));
+            paramArray.Add(new SqlParameter("@sNewLocationNo", p.sNewLocationNo));
 
             try
             {
@@ -157,26 +153,26 @@ namespace GewProductivityAppService.Service.Fn
         /// <summary>
         /// 通用查询，返回任意数据集
         /// </summary>
-        /// <param name="uspParams"></param>
+        /// <param name="p"></param>
         /// <returns></returns>
         [Route("GeneralQuery")]
         [HttpGet]
-        public IHttpActionResult GeneralQuery([FromUri] GeneralQueryBindModel uspParams)
+        public IHttpActionResult GeneralQuery([FromUri] GeneralQueryBm p)
         {
-            foreach (var _uspParam in uspParams.GetType().GetProperties())
+            foreach (var _uspParam in p.GetType().GetProperties())
             {
-                if (_uspParam.GetValue(uspParams) == null)
+                if (_uspParam.GetValue(p) == null)
                 {
-                    _uspParam.SetValue(uspParams, "");
+                    _uspParam.SetValue(p, "");
                 }
             }
             // 传入下拉类别类型
             List<SqlParameter> paramArray = new List<SqlParameter>();
-            paramArray.Add(new SqlParameter("@type", uspParams.type));
-            paramArray.Add(new SqlParameter("@param2", uspParams.param2));
-            paramArray.Add(new SqlParameter("@param3", uspParams.param3));
-            paramArray.Add(new SqlParameter("@param4", uspParams.param4));
-            paramArray.Add(new SqlParameter("@param5", uspParams.param5));
+            paramArray.Add(new SqlParameter("@type", p.type));
+            paramArray.Add(new SqlParameter("@param2", p.param2));
+            paramArray.Add(new SqlParameter("@param3", p.param3));
+            paramArray.Add(new SqlParameter("@param4", p.param4));
+            paramArray.Add(new SqlParameter("@param5", p.param5));
 
             try
             {
@@ -196,17 +192,17 @@ namespace GewProductivityAppService.Service.Fn
         /// <summary>
         /// 公共存储过程
         /// </summary>
-        /// <param name="uspParams"></param>
+        /// <param name="p"></param>
         /// <returns></returns>
         [Route("CommonUsp")]
-        [HttpPost]
-        public IHttpActionResult CommonUsp([FromUri] CommonProcedureBindModel uspParams)
+        [HttpGet]
+        public IHttpActionResult CommonUsp([FromUri] CommonProcedureBm p)
         {
-            foreach (var _uspParam in uspParams.GetType().GetProperties())
+            foreach (var _uspParam in p.GetType().GetProperties())
             {
-                if (_uspParam.GetValue(uspParams) == null)
+                if (_uspParam.GetValue(p) == null)
                 {
-                    _uspParam.SetValue(uspParams, "");
+                    _uspParam.SetValue(p, "");
                 }
             }
             // 传入下拉类别类型
@@ -214,12 +210,12 @@ namespace GewProductivityAppService.Service.Fn
             SqlParameter param = new SqlParameter("@rtnMsg", SqlDbType.VarChar, 2000);
             param.Direction = ParameterDirection.Output;
             paramArray.Add(param);
-            paramArray.Add(new SqlParameter("@type", uspParams.type));
-            paramArray.Add(new SqlParameter("@param2", uspParams.param2));
-            paramArray.Add(new SqlParameter("@param3", uspParams.param3));
-            paramArray.Add(new SqlParameter("@param4", uspParams.param4));
-            paramArray.Add(new SqlParameter("@param5", uspParams.param5));
-            paramArray.Add(new SqlParameter("@param6", uspParams.param6));
+            paramArray.Add(new SqlParameter("@type", p.type));
+            paramArray.Add(new SqlParameter("@param2", p.param2));
+            paramArray.Add(new SqlParameter("@param3", p.param3));
+            paramArray.Add(new SqlParameter("@param4", p.param4));
+            paramArray.Add(new SqlParameter("@param5", p.param5));
+            paramArray.Add(new SqlParameter("@param6", p.param6));
             
             try
             {

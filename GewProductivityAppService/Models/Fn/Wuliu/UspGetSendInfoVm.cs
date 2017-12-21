@@ -14,21 +14,16 @@ namespace GewProductivityAppService.DAL.MIS01.FNMDB
 
         public int GF_ID { get; set; }
 
-        //public string Operation_CHN { get; set; }
-
         public decimal Quantity { get; set; }
 
         public string GF_NO { get; set; }
 
-        //public DateTime 上工序结束时间 { get; set; }
-
-        //public string holder { get; set; }
 
         public string car_no { get; set; }
 
-        //public string WHITE_TYPE { get; set; }
+        public string sCode { get; set; }
 
-        //public string LOCATIONNO { get; set; }
+        public string Current_Department { get; set; }
 
     }
 }

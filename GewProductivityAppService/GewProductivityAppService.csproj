@@ -205,7 +205,7 @@
     <Compile Include="DAL\MIS01\FNMDB\fnHold.cs" />
     <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
     <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
-    <Compile Include="DAL\MIS01\FNMDB\UspGetSendInfo.cs" />
+    <Compile Include="Models\Fn\Wuliu\UspGetSendInfoVm.cs" />
     <Compile Include="DAL\MIS01\Temp\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -224,8 +224,8 @@
     <Compile Include="DAL\MIS01\Temp\usp_GetSendInfo_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CommonProcedureBindModel.cs" />
-    <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBindModel.cs" />
+    <Compile Include="Models\CommonProcedureBm.cs" />
+    <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBm.cs" />
     <Compile Include="Service\Fn\WuliuController.cs" />
     <Compile Include="Service\HomeController.cs" />
     <Compile Include="Service\Common\CommonController.cs" />
@@ -252,7 +252,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\WvHubs\VieTaskHub.cs" />
-    <Compile Include="Models\GeneralQueryBindModel.cs" />
+    <Compile Include="Models\GeneralQueryBm.cs" />
     <Compile Include="Models\Common\QuerySingleValueBindModel.cs" />
     <Compile Include="Models\Common\UspParamBindModel.cs" />
     <Compile Include="Models\Common\ItemViewModel.cs" />

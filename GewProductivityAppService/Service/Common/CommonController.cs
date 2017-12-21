@@ -130,7 +130,7 @@ namespace GewProductivityAppService.Service.Common
         /// <returns></returns>
         [Route("GeneralQuery")]
         [HttpGet]
-        public IHttpActionResult GeneralQuery([FromUri] GeneralQueryBindModel uspParams)
+        public IHttpActionResult GeneralQuery([FromUri] GeneralQueryBm uspParams)
         {
             foreach (var _uspParam in uspParams.GetType().GetProperties())
             {

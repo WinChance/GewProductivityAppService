@@ -5,7 +5,7 @@ using System.Web;
 
 namespace GewProductivityAppService.Models
 {
-    public class CommonProcedureBindModel
+    public class CommonProcedureBm
     {
         /// <summary>
         /// 查询类型，必须

@@ -1,6 +1,6 @@
 ﻿namespace GewProductivityAppService.Models
 {
-    public class GeneralQueryBindModel
+    public class GeneralQueryBm
     {
         /// <summary>
         /// 查询类型，必须
