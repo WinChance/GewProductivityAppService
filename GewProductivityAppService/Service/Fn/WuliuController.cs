@@ -176,7 +176,7 @@ namespace GewProductivityAppService.Service.Fn
 
             try
             {
-                var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, "EXEC [dbo].[usp_prdAppGeneralQuery]  @type,@param2,@param3,@param4,@param5", paramArray.ToArray());
+                var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, "EXEC [dbo].[usp_prdFnGeneralQuery]  @type,@param2,@param3,@param4,@param5", paramArray.ToArray());
                 return Json(dynamicDbSet);
             }
             catch (Exception e)
@@ -220,7 +220,7 @@ namespace GewProductivityAppService.Service.Fn
             try
             {
                 fnmDb.Database.ExecuteSqlCommand(
-                    "EXEC [dbo].[usp_prdAppCommonProcedure]  @type,@param2,@param3,@param4,@param5,@param6,@rtnMsg out",
+                    "EXEC [dbo].[usp_prdFnCommonProcedure]  @type,@param2,@param3,@param4,@param5,@param6,@rtnMsg out",
                     paramArray.ToArray());
 
                 string rtnMsg = paramArray[0].Value.ToString();
