@@ -183,8 +183,7 @@ namespace GewProductivityAppService.Service.Fn
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "存储过程异常"
+                    Content = new StringContent(e.Message)
                 };
                 throw new HttpResponseException(resp);
             }
@@ -205,11 +204,7 @@ namespace GewProductivityAppService.Service.Fn
                     _uspParam.SetValue(p, "");
                 }
             }
-            // 传入下拉类别类型
             List<SqlParameter> paramArray = new List<SqlParameter>();
-            SqlParameter param = new SqlParameter("@rtnMsg", SqlDbType.VarChar, 2000);
-            param.Direction = ParameterDirection.Output;
-            paramArray.Add(param);
             paramArray.Add(new SqlParameter("@type", p.type));
             paramArray.Add(new SqlParameter("@param2", p.param2));
             paramArray.Add(new SqlParameter("@param3", p.param3));
@@ -220,24 +215,48 @@ namespace GewProductivityAppService.Service.Fn
             try
             {
                 fnmDb.Database.ExecuteSqlCommand(
-                    "EXEC [dbo].[usp_prdFnCommonProcedure]  @type,@param2,@param3,@param4,@param5,@param6,@rtnMsg out",
+                    "EXEC [dbo].[usp_prdFnCommonProcedure]  @type,@param2,@param3,@param4,@param5,@param6",
                     paramArray.ToArray());
-
-                string rtnMsg = paramArray[0].Value.ToString();
-                if (rtnMsg == "success")
-                {
                     return Ok();
-                }
-                else
-                {
-                    log.Error(rtnMsg);
-                    return BadRequest();
-                }
             }
             catch (Exception e)
             {
                 log.Error(e.Message);
-                return BadRequest();
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(e.Message)
+                };
+                throw new HttpResponseException(resp);
+            }
+        }
+        /// <summary>
+        /// 测试存储过程
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="param2"></param>
+        /// <returns></returns>
+        [Route("TestUsp")]
+        [HttpGet]
+        public IHttpActionResult TestUsp([FromUri] string type,string param2)
+        {
+            List<SqlParameter> paramArray = new List<SqlParameter>();
+            paramArray.Add(new SqlParameter("@type", type));
+            paramArray.Add(new SqlParameter("@param2", param2));
+            try
+            {
+                fnmDb.Database.ExecuteSqlCommand(
+                    "EXEC [dbo].[usp_prdFnTestProcedure]  @type,@param2",
+                    paramArray.ToArray());
+                    return Ok();
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(e.Message)
+                };
+                throw new HttpResponseException(resp);
             }
         }
 
