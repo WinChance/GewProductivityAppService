@@ -1,5 +1,7 @@
 -- 产量表
-SELECT TOP 1000 * from PDMDB.dbo.hlOutput    where post='穿综' AND Remark IS NOT NULL AND [Remark] LIKE '输入人%' ORDER BY InputTime DESC
+SELECT TOP 1000 Iden, HL_No, Name, Class, Post, Sys_Score, Dync_Score, ProValue,
+                CONVERT(VARCHAR(12),InputTime,120), ModifyName, ModifyTime, Remark, IsLargeType, IsMore,
+                IsCalico, Remark2 from PDMDB.dbo.hlOutput    where post='穿综' AND Remark IS NOT NULL AND [Remark] LIKE '输入人%' ORDER BY InputTime DESC
 -- 人员表
 select TOP 10 * from PDMDB.dbo.hlProductionStaff  where Post='穿综'   --人员.
 -- 基础信息表
@@ -98,6 +100,18 @@ SELECT    ISNULL(b.HealdingScore,0)
 -----------------------------------------------
 
 SELECT TOP 10 * FROM PDMDB.dbo.hlUnHealdingScore AS a ORDER BY a.Iden DESC
+
+SELECT TOP 10 * FROM GewPrdAppDB.dbo.peAppWvUser WHERE name='温燕芬'
+
+UPDATE GewPrdAppDB.dbo.peAppWvUser SET name='温燕芬' WHERE name='梁燕芬'
+
+DELETE FROM GewPrdAppDB.dbo.peAppWvUser  WHERE Id=1726
+
+SELECT * FROM PDMDB.dbo.hlOutput WHERE Name LIKE '%梁燕芬%' AND InputTime>'2017-1-1 00:00' AND InputTime<'2018-1-1 00:00'
+
+SELECT TOP 1000 Iden, HL_No, Name, Class, Post, Sys_Score, Dync_Score, ProValue,
+                CONVERT(VARCHAR(20),InputTime,120) AS InputTime, ModifyName, ModifyTime, Remark, IsLargeType, IsMore,
+                IsCalico, Remark2 from PDMDB.dbo.hlOutput    where post='穿综' AND Remark IS NOT NULL AND [Remark] LIKE '输入人%' AND InputTime>'2017-08-14 09:41:32' ORDER BY InputTime DESC
 
 
 

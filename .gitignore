@@ -297,3 +297,9 @@ __pycache__/
 *.dgml
 *.png
 *.gif
+*.svg
+*.ttf
+*.woff
+lib/
+GewProductivityAppService/Scripts/kendo
+GewProductivityAppService/Content

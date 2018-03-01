@@ -1,0 +1,137 @@
+﻿@using GewProductivityAppService.Areas.QiWebApp.Models
+@using Kendo.Mvc.UI
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/QiWebApp/Views/Shared/_WebAppLayout.cshtml";
+
+}
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width" />
+    @* 设置网页字体默认为10px  *@
+    <style>
+        html {
+            font-size: 12px;
+        }
+
+        .k-grid table {
+            min-width: 400px;
+        }
+
+        .k-grid {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .smaller-than-zero {
+            color: red;
+        }
+        .divice-width {
+            width: 95%;
+        }
+        .hr0
+        {
+            height:0px;
+            border:none;
+            margin-top:3px;
+            margin-bottom:3px;
+            margin-right:0px;
+            margin-left:0px;
+        }
+        .hr1
+        {
+            height:0px;
+            border:none;
+            margin-top:15px;
+            margin-bottom:15px;
+            margin-right:0px;
+            margin-left:0px;
+        }
+		
+    </style>
+</head>
+
+<body>
+<hr class="hr0"/>
+<div class="container-fluid">
+    <div class="row-fluid">
+        起：@Html.Kendo().DatePicker().Name("date_from").HtmlAttributes(new { style = "width: 40%;"}).Value(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(-1).Day))
+        止：@(Html.Kendo().DatePicker().Name("date_to").HtmlAttributes(new { style = "width: 40%;"}).Value(DateTime.Today))
+        
+    </div>
+    <hr class="hr0"/>
+    <div class="row">
+        <div class="input-group divice-width ">
+            <input id="input_name" type="text" class="form-control" value="@ViewBag.codeno" placeholder="输入员工号GET0..">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" name="queryButton" onclick="QueryBtnOnClick()">
+                    查询
+                </button>
+            </span>
+        </div>
+    </div>
+</div>
+<hr class="hr1"/>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            @(Html.Kendo().Grid<QiYieldQueryVm>().HtmlAttributes(new { style = "width: 100%"}).Name("grid")
+                  .Columns(columns =>
+                  {
+                      columns.Bound(c => c.HL_No).Title("HL NO").Filterable(false).Width(12);
+                      columns.Bound(c => c.Class).Title("班").Filterable(false).Width(3);
+                      columns.Bound(c => c.Sys_Score).Title("系统").Filterable(false).Width(6);
+                      columns.Bound(c => c.Dync_Score).Title("评分").Filterable(false).ClientFooterTemplate("<div>总分: #= sum #</div>").Width(6);
+                      columns.Bound(c => c.InputTime).Title("输入时间").Format("{0:MM/dd HH:mm}").Filterable(false).Width(17);
+                    
+                  
+                  }).Pageable(pager => pager
+                      .PageSizes(true)
+
+                      .Messages(messages => messages.ItemsPerPage("项每页"))).Sortable(sortable =>
+                      {
+                          sortable.SortMode(GridSortMode.SingleColumn);
+                      })
+                  .Selectable(selectable =>
+                  {
+                      selectable.Mode(GridSelectionMode.Single);
+                      selectable.Type(GridSelectionType.Row);
+                  })
+                  .Filterable()
+                  .Scrollable(s => s.Height(350)).DataSource(dataSource => dataSource
+                      .Ajax()
+                      .Aggregates(aggregates =>
+                      {
+                          aggregates.Add(y => y.Dync_Score).Sum();
+                      })
+                      .Read(read => read.Action("Yields_Read", "Yield").Data("yieldTbFilter")).Sort(o=>o.Add(h=>h.InputTime)).PageSize(12)
+                  ).AutoBind(false))
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    function QueryBtnOnClick() {
+        refreshGrid();
+    }
+    // 返回json格式
+    function yieldTbFilter() {
+        var beginDate = $("#date_from").data("kendoDatePicker");
+        var endDate = $("#date_to").data("kendoDatePicker");
+        var employeeNumber = document.getElementById("input_name").value;
+
+        var filter = {
+            beginDate: beginDate.value(),
+            endDate: endDate.value(),
+            employeeNumber: employeeNumber
+        }
+        return filter;
+    }
+    // 这个函数将调用网格的 读 行动。
+    function refreshGrid() {
+        var yieldTb = $("#grid").data("kendoGrid");
+        // 调用相应控件的数据源读方法
+        yieldTb.dataSource.read();
+    }
+</script>
+

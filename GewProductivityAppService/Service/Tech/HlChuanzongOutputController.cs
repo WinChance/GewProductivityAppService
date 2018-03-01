@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web.Http;
 using System.Web.WebPages;
+using GewProductivityAppService.DAL.GETNT62.GewPrdAppDB;
 using GewProductivityAppService.DAL.MIS01.PDMDB;
 using GewProductivityAppService.Models.Tech.HlChuanzongOutput;
 
@@ -13,7 +15,9 @@ namespace GewProductivityAppService.Service.Tech
     [RoutePrefix("api/Tech")]
     public class HlChuanzongOutputController : ApiController
     {
-        private PdmDbContext PdmDb = new PdmDbContext();
+        private PdmDbContext pdmDb = new PdmDbContext();
+
+        private PrdAppDbContext prdAppDb = new PrdAppDbContext();
 
         /// <summary>
         /// 根据HL_NO，返回系统分数
@@ -30,7 +34,7 @@ namespace GewProductivityAppService.Service.Tech
                 if (!hlNo.ToUpper().Contains("HL"))
                 {
                     int _nAutoID = Convert.ToInt32(hlNo);
-                    hlNo = PdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
+                    hlNo = pdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
                 }
                 // 系统分=基础分+飞穿分
                 sqlText = @"
@@ -46,11 +50,11 @@ SELECT    ISNULL(b.HealdingScore,0)
           FROM      hlBasicInfo AS b with(nolock)
           WHERE     b.HL_No = @HL_NO)AS c ;";
                 // 系统分计算
-                decimal sysCalScore = PdmDb.Database.SqlQuery<decimal>(sqlText, hlNo).FirstOrDefault();
+                decimal sysCalScore = pdmDb.Database.SqlQuery<decimal>(sqlText, hlNo).FirstOrDefault();
                 // 余下分数
                 decimal remainScore = sysCalScore;
                 // 计算该HL_NO已完成的分数和
-                var sum = PdmDb.hlOutputs.Where(o => o.HL_No.Equals(hlNo, StringComparison.CurrentCultureIgnoreCase)).Sum(o => o.Dync_Score);
+                var sum = pdmDb.hlOutputs.Where(o => o.HL_No.Equals(hlNo, StringComparison.CurrentCultureIgnoreCase)).Sum(o => o.Dync_Score);
                 if (sum != null)
                 {
                     remainScore = (sysCalScore - sum.Value) <= 0 ? 0 : (sysCalScore - sum.Value);
@@ -85,7 +89,7 @@ SELECT    ISNULL(b.HealdingScore,0)
             if (!hlNo.Contains("HL"))
             {
                 int _nAutoID = Convert.ToInt32(hlNo);
-                hlNo = PdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
+                hlNo = pdmDb.Pattern2HL.Where(p => p.nAutoID.Equals(_nAutoID)).Select(p => p.strHLNo).FirstOrDefault();
             }
             var output = new hlOutput()
             {
@@ -98,18 +102,44 @@ SELECT    ISNULL(b.HealdingScore,0)
                 Remark = "输入人：" + hlOutput.Remark,// 记录APP登录人
                 InputTime = DateTime.Now
             };
-            PdmDb.hlOutputs.Add(output);
-            PdmDb.SaveChanges();
+            pdmDb.hlOutputs.Add(output);
+            pdmDb.SaveChanges();
 
             return Ok();
         }
 
+        /// <summary>
+        /// APP端查询工人最近产量
+        /// </summary>
+        /// <param name="empoNo"></param>
+        /// <param name="beginDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        [Route("hlOutput/GetHlOutputByEmpoNo"), HttpGet]
+        public IHttpActionResult GetHlOutput([FromUri]string empoNo, string beginDate, string endDate)
+        {
+            DateTime _beginDate=beginDate.AsDateTime();
+            DateTime _endDate=endDate.AsDateTime();
+            if (empoNo==null)
+                return NotFound();
+            string empoName=prdAppDb.peAppWvUsers.Where(u => u.code.Equals(empoNo)).Select(u => u.name).FirstOrDefault();
 
+            var rtn = pdmDb.hlOutputs.Where(h => h.Name.Equals(empoName) && h.InputTime > _beginDate && h.InputTime < _endDate).OrderByDescending(h => h.InputTime).Select(h => new
+                {
+                    h.HL_No,
+                    h.Class,
+                    h.Sys_Score,
+                    h.Dync_Score,
+                    h.InputTime
+                })
+                .ToList();
+            return Json(rtn);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                PdmDb.Dispose();
+                pdmDb.Dispose();
 
             }
             base.Dispose(disposing);

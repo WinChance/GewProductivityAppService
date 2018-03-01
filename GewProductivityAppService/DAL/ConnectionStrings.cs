@@ -32,8 +32,8 @@ namespace GewProductivityAppService.DAL
         public static string WvmDbConnectionString = conStr.Replace("master", "WVMDB");
 
         /// <summary>
-        /// WVMDB连接字符串，供上下文使用
+        /// GewPrdAppDB连接字符串，供上下文使用
         /// </summary>
-        public static string PrdAppDbConnectionString = conStr.Replace("master", "GewPrdAppDB");
+        //public static string PrdAppDbConnectionString = ConfigurationManager.ConnectionStrings["GewPrdAppDB"].ToString();
     }
 }
