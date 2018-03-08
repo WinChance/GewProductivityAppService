@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Web.Http;
 using System.Web.WebPages;
 using GewProductivityAppService.DAL.GETNT62.GewPrdAppDB;
@@ -118,11 +121,11 @@ SELECT    ISNULL(b.HealdingScore,0)
         [Route("hlOutput/GetHlOutputByEmpoNo"), HttpGet]
         public IHttpActionResult GetHlOutput([FromUri]string empoNo, string beginDate, string endDate)
         {
-            DateTime _beginDate=beginDate.AsDateTime();
-            DateTime _endDate=endDate.AsDateTime();
-            if (empoNo==null)
+            DateTime _beginDate = beginDate.AsDateTime();
+            DateTime _endDate = endDate.AsDateTime();
+            if (empoNo == null)
                 return NotFound();
-            string empoName=prdAppDb.peAppWvUsers.Where(u => u.code.Equals(empoNo)).Select(u => u.name).FirstOrDefault();
+            string empoName = prdAppDb.peAppWvUsers.Where(u => u.code.Equals(empoNo)).Select(u => u.name).FirstOrDefault();
 
             var rtn = pdmDb.hlOutputs.Where(h => h.Name.Equals(empoName) && h.InputTime > _beginDate && h.InputTime < _endDate).OrderByDescending(h => h.InputTime).Select(h => new
                 {
@@ -135,6 +138,33 @@ SELECT    ISNULL(b.HealdingScore,0)
                 .ToList();
             return Json(rtn);
         }
+
+        /// <summary>
+        /// 根据穿综工人姓名返回班别
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [Route("hlOutput/GetClassByName"), HttpGet]
+        public HttpResponseMessage GetClassByName(string name)
+        {
+            try
+            {
+                string _class = pdmDb.hlOutputs.Where(o => o.Name.Equals(name)).Take(1).OrderByDescending(o => o.InputTime).Select(o => o.Class).FirstOrDefault();
+                HttpResponseMessage responseMessage =
+                    new HttpResponseMessage
+                    {
+                        Content =
+                            new StringContent(_class, Encoding.GetEncoding("UTF-8"),
+                                "text/plain")
+                    };
+                return responseMessage;
+            }
+            catch (Exception e)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

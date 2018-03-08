@@ -220,12 +220,19 @@
     <Compile Include="Areas\QiWebApp\QiWebAppAreaRegistration.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\peAppWvUser.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\PrdAppDbContext.cs" />
+    <Compile Include="DAL\GETNT62\GewPrdAppDB\Temp\Model1.cs" />
+    <Compile Include="DAL\GETNT62\GewPrdAppDB\peAppWvWorker.cs" />
     <Compile Include="DAL\MIS01\FNMDB\fnHold.cs" />
     <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
     <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\Temp\Model1.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\SongZhouinfo.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\Temp\Model2.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\ydBatchTrace.cs" />
     <Compile Include="Models\Fn\Wuliu\UspGetSendInfoVm.cs" />
     <Compile Include="Models\CommonProcedureBm.cs" />
     <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBm.cs" />
+    <Compile Include="Models\Yd\SongZhou\DaiSongZhouVm.cs" />
     <Compile Include="Service\Fn\WuliuController.cs" />
     <Compile Include="Service\HomeController.cs" />
     <Compile Include="Service\Common\CommonController.cs" />
@@ -260,6 +267,7 @@
     <Compile Include="Models\Tech\HlChuanzongOutput\HlOutputBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\RtProductionBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\SarongStatusViewModel.cs" />
+    <Compile Include="Service\Yd\SongZhouController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\DynamicSqlQueryClass.cs" />
   </ItemGroup>

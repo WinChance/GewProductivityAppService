@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -25,7 +26,7 @@ namespace GewProductivityAppService.Utils
         /// <param name="sql"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public  IEnumerable DynamicSqlQuery(Database database, string sql, params object[] parameters)
+        public IEnumerable DynamicSqlQuery(Database database, string sql, params object[] parameters)
         {
             TypeBuilder builder = CreateTypeBuilder(
                 "MyDynamicAssembly", "MyDynamicModule", "MyDynamicType");

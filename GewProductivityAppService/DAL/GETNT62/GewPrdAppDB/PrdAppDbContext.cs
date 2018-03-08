@@ -1,3 +1,4 @@
+
 namespace GewProductivityAppService.DAL.GETNT62.GewPrdAppDB
 {
     using System;
@@ -15,6 +16,7 @@ namespace GewProductivityAppService.DAL.GETNT62.GewPrdAppDB
         }
 
         public virtual DbSet<peAppWvUser> peAppWvUsers { get; set; }
+        public virtual DbSet<peAppWvWorker> peAppWvWorkers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
