@@ -45,6 +45,14 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -61,25 +69,29 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Cors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Cors.4.0.0\lib\net451\Microsoft.Owin.Cors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.0.0\lib\net451\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -90,6 +102,10 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Quartz, Version=2.6.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.6.1\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +114,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
@@ -218,6 +235,9 @@
     <Compile Include="Areas\QiWebApp\Controllers\YieldController.cs" />
     <Compile Include="Areas\QiWebApp\Models\QiYieldQueryVm.cs" />
     <Compile Include="Areas\QiWebApp\QiWebAppAreaRegistration.cs" />
+    <Compile Include="DAL\GETNT103\MonitorWv2\machine.cs" />
+    <Compile Include="DAL\GETNT103\MonitorWv2\MonitorWv2DbContext.cs" />
+    <Compile Include="DAL\GETNT103\MonitorWv2\QiangDanTask.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\peAppWvUser.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\PrdAppDbContext.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\Temp\Model1.cs" />
@@ -226,18 +246,25 @@
     <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
     <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
     <Compile Include="DAL\MIS01\YDMDB\Temp\Model1.cs" />
-    <Compile Include="DAL\MIS01\YDMDB\SongZhouinfo.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\prdSongZhouinfo.cs" />
     <Compile Include="DAL\MIS01\YDMDB\Temp\Model2.cs" />
     <Compile Include="DAL\MIS01\YDMDB\ydBatchTrace.cs" />
     <Compile Include="Models\Fn\Wuliu\UspGetSendInfoVm.cs" />
     <Compile Include="Models\CommonProcedureBm.cs" />
     <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBm.cs" />
+    <Compile Include="Models\Wv\QiangDan\PushTarget.cs" />
     <Compile Include="Models\Yd\SongZhou\DaiSongZhouVm.cs" />
     <Compile Include="Service\Fn\WuliuController.cs" />
     <Compile Include="Service\HomeController.cs" />
     <Compile Include="Service\Common\CommonController.cs" />
     <Compile Include="Service\Pr\AbandonYarnController.cs" />
     <Compile Include="Service\Pr\MachineRotateRateController.cs" />
+    <Compile Include="Service\Quartz\QiangDanPushJob.cs" />
+    <Compile Include="Service\Quartz\QiangDanPushJobScheduler.cs" />
+    <Compile Include="Service\Quartz\Yd2PrShouSongZhouPushJob.cs" />
+    <Compile Include="Service\Quartz\Yd2PrShouSongZhouPushJobScheduler.cs" />
+    <Compile Include="Service\SignalR\ChatHub.cs" />
+    <Compile Include="Service\SignalR\PushHub.cs" />
     <Compile Include="Service\Tech\HlChuanzongOutputController.cs" />
     <Compile Include="Service\Yd\SarongStatusController.cs" />
     <Compile Include="DAL\ConnectionStrings.cs" />
@@ -261,7 +288,7 @@
     <Compile Include="Models\Common\ItemViewModel.cs" />
     <Compile Include="Models\Pr\AbandonYarn\AbandonYarnBindModel.cs" />
     <Compile Include="Models\Pr\MachineRotateRate\MachineRotateRateBindModel.cs" />
-    <Compile Include="Models\Wv\VieTask\OrderInfo.cs" />
+    <Compile Include="Models\Wv\QiangDan\OrderInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Common\DropDownListViewModel.cs" />
     <Compile Include="Models\Tech\HlChuanzongOutput\HlOutputBindModel.cs" />
@@ -748,6 +775,9 @@
     <Content Include="Areas\QiWebApp\Views\web.config" />
     <Content Include="Areas\QiWebApp\Views\Shared\_WebAppLayout.cshtml" />
     <Content Include="Areas\QiWebApp\Views\Yield\Index.cshtml" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\AppService.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -756,8 +786,8 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.3.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2017.2.504\angular.min.js" />
     <Content Include="Scripts\kendo\2017.2.504\jquery.min.js" />

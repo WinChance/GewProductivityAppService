@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using GewProductivityAppService.Service.Quartz;
 using Newtonsoft.Json.Converters;
 
 namespace GewProductivityAppService
@@ -21,7 +22,8 @@ namespace GewProductivityAppService
             log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(Server.MapPath("Log4net.config")));
             // 自定义事件注册
             
-
+            QiangDanPushJobScheduler.Start();
+            Yd2PrShouSongZhouPushJobScheduler.Start();
 
         }
 
@@ -35,7 +37,9 @@ namespace GewProductivityAppService
             // 在应用程序关闭时运行的代码 
             //解决应用池回收问题 
             System.Threading.Thread.Sleep(5000);
-            string strUrl = "192.168.22.125:8889";
+            //string strUrl = "192.168.22.125:8889";
+            // "192.168.7.38/GEWProductivityAppSer"
+            string strUrl = "192.168.7.38/GEWProductivityAppSer";
             System.Net.HttpWebRequest _HttpWebRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(strUrl);
             System.Net.HttpWebResponse _HttpWebResponse = (System.Net.HttpWebResponse)_HttpWebRequest.GetResponse();
             System.IO.Stream _Stream = _HttpWebResponse.GetResponseStream();//得到回写的字节流 

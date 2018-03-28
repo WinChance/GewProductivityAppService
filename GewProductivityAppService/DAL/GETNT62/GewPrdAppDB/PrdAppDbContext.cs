@@ -9,7 +9,7 @@ namespace GewProductivityAppService.DAL.GETNT62.GewPrdAppDB
     public partial class PrdAppDbContext : DbContext
     {
         public PrdAppDbContext()
-            : base("name=GewPrdAppDB")
+            : base("name=GewPrdAppDb")
         {
             // 需要在EF 4.3上关闭数据库初始化策略
             Database.SetInitializer<PrdAppDbContext>(null);

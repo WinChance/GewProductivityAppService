@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GewProductivityAppService.DAL.MIS01.YDMDB
 {
-    [Table("SongZhouinfo")]
-    public partial class SongZhouinfo
+    [Table("prdSongZhouinfo")]
+    public partial class prdSongZhouinfo
     {
         [Key]
         [Column(Order = 0)]

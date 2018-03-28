@@ -12,23 +12,23 @@ namespace GewProductivityAppService.DAL.MIS01.YDMDB.Temp
         {
         }
 
-        public virtual DbSet<SongZhouinfo> SongZhouinfoes { get; set; }
+        public virtual DbSet<prdSongZhouinfo> SongZhouinfoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SongZhouinfo>()
+            modelBuilder.Entity<prdSongZhouinfo>()
                 .Property(e => e.machinetype)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<SongZhouinfo>()
+            modelBuilder.Entity<prdSongZhouinfo>()
                 .Property(e => e.batchno)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<SongZhouinfo>()
+            modelBuilder.Entity<prdSongZhouinfo>()
                 .Property(e => e.ydoperator)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<SongZhouinfo>()
+            modelBuilder.Entity<prdSongZhouinfo>()
                 .Property(e => e.properator)
                 .IsUnicode(false);
         }

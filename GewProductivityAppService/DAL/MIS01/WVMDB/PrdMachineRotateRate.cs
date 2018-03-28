@@ -22,11 +22,11 @@ namespace GewProductivityAppService.DAL.MIS01.WVMDB
         [StringLength(5)]
         public string Machine { get; set; }
 
-        public int Begin { get; set; }
+        public decimal BeginTime { get; set; }
 
-        public int End { get; set; }
+        public decimal EndTime { get; set; }
 
-        public int RotateDuration { get; set; }
+        public decimal RotateDuration { get; set; }
 
         [StringLength(10)]
         public string Operator { get; set; }

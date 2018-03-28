@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.WebPages;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
+using GewProductivityAppService.Service.SignalR;
 using GewProductivityAppService.Utils;
 using log4net;
 using Z.EntityFramework.Plus;
@@ -19,22 +20,32 @@ namespace GewProductivityAppService.Service.Yd
     [RoutePrefix("api/Yd")]
     public class SongZhouController : ApiController
     {
+        
         private YdmDbContext ydmDb = new YdmDbContext();
         private static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public class DaiRanZhouInfoBm
+        {
+            public string machinetype { get; set; }
+        }
         /// <summary>
         /// 取染台待染轴信息
         /// </summary>
         /// <param name="machinetype">缸型</param>
         /// <returns></returns>
         [Route("GetDaiRanZhouInfo"),HttpGet]
-        public IHttpActionResult GetDaiRanZhouInfo(string machinetype="")
+        public IHttpActionResult GetDaiRanZhouInfo([FromUri] DaiRanZhouInfoBm bm)
         {
             try
             {
-                //SqlParameter param=new SqlParameter("@param",machinetype);
-                //List<SqlParameter> paramArray = new List<SqlParameter>();
-                //paramArray.Add(new SqlParameter("@param", machinetype));
-                var rtn = DynamicSqlQueryClass.Instance.DynamicSqlQuery(ydmDb.Database, "EXEC usp_getSongZhouinfo @param", new SqlParameter("@param", machinetype));
+                foreach (var _bm in bm.GetType().GetProperties())
+                {
+                    if (_bm.GetValue(bm) == null)
+                    {
+                        _bm.SetValue(bm, "");
+                    }
+                }
+                var rtn = DynamicSqlQueryClass.Instance.DynamicSqlQuery(ydmDb.Database, "EXEC usp_prdGetSongZhouinfo @param", new SqlParameter("@param", bm.machinetype));
 
                 return Json(rtn);
             }
@@ -43,7 +54,18 @@ namespace GewProductivityAppService.Service.Yd
                 return NotFound();
             }
         }
+        /// <summary>
+        /// 绑定类型
+        /// </summary>
+        public class SendTaskBm
+        {
+            public string machinetype { get; set; }
+            public string batchno { get; set; }
+            public string nums { get; set; }
+            public string plantime { get; set; }
+            public string ydoperator { get; set; }
 
+        }
         /// <summary>
         /// 染纱向准备发出拉轴任务
         /// </summary>
@@ -53,27 +75,27 @@ namespace GewProductivityAppService.Service.Yd
         /// <param name="plantime"></param>
         /// <param name="ydoperator"></param>
         /// <returns></returns>
-        [Route("SongZhouByYd"), HttpPost]
-        public IHttpActionResult SongZhouByYd([FromUri] string machinetype, string batchno, string nums,
-            string plantime, string ydoperator)
+        [Route("SendTaskByYd"), HttpPost]
+        public IHttpActionResult SendTaskByYd([FromBody]SendTaskBm bm)
         {
             try
             {
-                ydmDb.SongZhouinfoes.Add(new SongZhouinfo()
+                ydmDb.prdSongZhouinfoes.Add(new prdSongZhouinfo()
                 {
-                    machinetype = machinetype,
-                    batchno = batchno,
-                    nums = nums.AsInt(),
-                    plantime = plantime.AsDateTime(),
-                    ydoperator = ydoperator,
+                    machinetype = bm.machinetype,
+                    batchno = bm.batchno,
+                    nums = bm.nums.AsInt(),
+                    plantime = bm.plantime.AsDateTime(),
+                    ydoperator = bm.ydoperator,
                     ydoperattime = DateTime.Now
                 });
-                ydmDb.ydBatchTraces.Where(t => t.Batch_NO.Equals(batchno, StringComparison.CurrentCultureIgnoreCase))
+                ydmDb.ydBatchTraces.Where(t => t.Batch_NO.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
                     .Update(z => new ydBatchTrace()
                     {
                         IsSongZhou = "Y"
                     });
                 ydmDb.SaveChanges();
+                PushHub.Instance.PushYdDaiSongZhouInfo();
                 return Ok();
             }
             catch (Exception e)
@@ -88,28 +110,34 @@ namespace GewProductivityAppService.Service.Yd
         /// 准备工人查询待送的轴
         /// </summary>
         /// <returns></returns>
-        [Route("GetDaiSongZhou"), HttpGet]
-        public IHttpActionResult GetDaiSongZhou()
+        [Route("GetDaiSongZhouInfo"), HttpGet]
+        public IHttpActionResult GetDaiSongZhouInfo()
         {
-            var rtn=ydmDb.SongZhouinfoes.Where(z => z.properattime != null).Select(z=>new {z.machinetype,z.batchno,z.nums,z.plantime}).OrderBy(z=>z.plantime).ToList();
+            var rtn = ydmDb.prdSongZhouinfoes.Where(z => z.properattime==null).Select(z => new { z.machinetype, z.batchno, z.nums, z.plantime }).OrderBy(z => z.plantime).ToList();
             return Json(rtn);
         }
 
+        public class ReceiveTaskBm
+        {
+            public string batchno { get; set; }
+            public string properator { get; set; }
+
+        }
         /// <summary>
         /// 准备拉轴工确认拉轴
         /// </summary>
         /// <param name="batchno"></param>
         /// <param name="properator"></param>
         /// <returns></returns>
-        [Route("ShouZhouByPr"), HttpPost]
-        public IHttpActionResult ShouZhouByPr([FromUri]  string batchno, string properator)
+        [Route("ReceiveTaskByPr"), HttpPost]
+        public IHttpActionResult ReceiveTaskByPr([FromBody]ReceiveTaskBm bm)
         {
             try
             {
-                ydmDb.SongZhouinfoes.Where(z => z.batchno.Equals(batchno, StringComparison.CurrentCultureIgnoreCase))
-                    .Update(z=>new SongZhouinfo()
+                ydmDb.prdSongZhouinfoes.Where(z => z.batchno.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
+                    .Update(z=>new prdSongZhouinfo()
                     {
-                        properator = z.properator,
+                        properator = bm.properator,
                         properattime = DateTime.Now
                     });
                 ydmDb.SaveChanges();
@@ -122,8 +150,10 @@ namespace GewProductivityAppService.Service.Yd
             }
         }
 
-
-
+        /// <summary>
+        /// 回收资源
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
 

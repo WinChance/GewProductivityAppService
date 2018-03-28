@@ -15,11 +15,9 @@ namespace GewProductivityAppService.Models.Pr.MachineRotateRate
 
         public string Machine { get; set; }
 
-        public int Begin { get; set; }
+        public decimal Begin { get; set; }
 
-        public int End { get; set; }
-
-        //public int RotateDuration { get; set; }
+        public decimal End { get; set; }
 
         public string Operator { get; set; }
 

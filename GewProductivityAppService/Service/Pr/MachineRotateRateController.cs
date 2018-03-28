@@ -33,8 +33,8 @@ namespace GewProductivityAppService.Service.Pr
                 Process = bm.Process,
                 WorkerClass = bm.WorkerClass,
                 Machine = bm.Machine,
-                Begin = bm.Begin,
-                End = bm.End,
+                BeginTime = bm.Begin,
+                EndTime = bm.End,
                 RotateDuration = bm.End - bm.Begin,
                 Operator = bm.Operator,
                 YieldDate = bm.YieldDate
