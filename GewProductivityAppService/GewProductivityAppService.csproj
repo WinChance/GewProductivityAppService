@@ -263,7 +263,6 @@
     <Compile Include="Service\Quartz\QiangDanPushJobScheduler.cs" />
     <Compile Include="Service\Quartz\Yd2PrShouSongZhouPushJob.cs" />
     <Compile Include="Service\Quartz\Yd2PrShouSongZhouPushJobScheduler.cs" />
-    <Compile Include="Service\SignalR\ChatHub.cs" />
     <Compile Include="Service\SignalR\PushHub.cs" />
     <Compile Include="Service\Tech\HlChuanzongOutputController.cs" />
     <Compile Include="Service\Yd\SarongStatusController.cs" />

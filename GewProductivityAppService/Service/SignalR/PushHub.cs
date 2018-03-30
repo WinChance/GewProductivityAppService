@@ -43,7 +43,6 @@ namespace GewProductivityAppService.Service.SignalR
             using (PrdAppDbContext prdAppDb = new PrdAppDbContext())
             {
                 var user = prdAppDb.peAppWvUsers.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
-
                 if (user != null)
                 {
                     prdAppDb.peAppWvUsers.Where(u => u.ConnectionId == Context.ConnectionId).Update(u => new peAppWvUser() { ConnectionId = "", IsLogin = false });
