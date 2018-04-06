@@ -64,6 +64,7 @@ namespace GewProductivityAppService.Service.Yd
             public string nums { get; set; }
             public string plantime { get; set; }
             public string ydoperator { get; set; }
+            public string predictInBatchTime { get; set; }
 
         }
         /// <summary>
@@ -80,6 +81,23 @@ namespace GewProductivityAppService.Service.Yd
         {
             try
             {
+                DateTime predictInBatchTime;
+                if (bm.predictInBatchTime.Contains("今天"))
+                {
+                    predictInBatchTime = (DateTime.Today.ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                }
+                else if (bm.predictInBatchTime.Contains("明天"))
+                {
+                    predictInBatchTime = (DateTime.Today.AddDays(1).ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                }
+                else if (bm.predictInBatchTime.Contains("后天"))
+                {
+                    predictInBatchTime = (DateTime.Today.AddDays(2).ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                }
+                else
+                {
+                    return BadRequest();
+                }
                 ydmDb.prdSongZhouinfoes.Add(new prdSongZhouinfo()
                 {
                     machinetype = bm.machinetype,
@@ -87,7 +105,8 @@ namespace GewProductivityAppService.Service.Yd
                     nums = bm.nums.AsInt(),
                     plantime = bm.plantime.AsDateTime(),
                     ydoperator = bm.ydoperator,
-                    ydoperattime = DateTime.Now
+                    ydoperattime = DateTime.Now,
+                    PredictInBatchTime = predictInBatchTime
                 });
                 ydmDb.ydBatchTraces.Where(t => t.Batch_NO.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
                     .Update(z => new ydBatchTrace()
@@ -121,6 +140,7 @@ namespace GewProductivityAppService.Service.Yd
         {
             public string batchno { get; set; }
             public string properator { get; set; }
+            public string location { get; set; }
 
         }
         /// <summary>
@@ -138,7 +158,8 @@ namespace GewProductivityAppService.Service.Yd
                     .Update(z=>new prdSongZhouinfo()
                     {
                         properator = bm.properator,
-                        properattime = DateTime.Now
+                        properattime = DateTime.Now,
+                        Location = bm.location
                     });
                 ydmDb.SaveChanges();
                 return Ok();

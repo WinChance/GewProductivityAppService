@@ -32,5 +32,9 @@ namespace GewProductivityAppService.DAL.MIS01.YDMDB
         public string properator { get; set; }
 
         public DateTime? properattime { get; set; }
+
+        public string Location { get; set; }
+
+        public DateTime? PredictInBatchTime { get; set; }
     }
 }
