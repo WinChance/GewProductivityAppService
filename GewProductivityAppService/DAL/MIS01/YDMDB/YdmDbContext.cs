@@ -13,7 +13,7 @@ namespace GewProductivityAppService.DAL.MIS01.YDMDB
 
         public virtual DbSet<prdAppSarong> prdAppSarongs { get; set; }
         public virtual DbSet<rtProduction> rtProductions { get; set; }
-        public virtual DbSet<prdSongZhouinfo> prdSongZhouinfoes { get; set; }
+        public virtual DbSet<prdSongZhouInfo> prdSongZhouinfoes { get; set; }
         public virtual DbSet<ydBatchTrace> ydBatchTraces { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

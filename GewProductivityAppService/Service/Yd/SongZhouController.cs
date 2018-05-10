@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.WebPages;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
@@ -20,7 +19,7 @@ namespace GewProductivityAppService.Service.Yd
     [RoutePrefix("api/Yd")]
     public class SongZhouController : ApiController
     {
-        
+
         private YdmDbContext ydmDb = new YdmDbContext();
         private static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -28,12 +27,13 @@ namespace GewProductivityAppService.Service.Yd
         {
             public string machinetype { get; set; }
         }
+
         /// <summary>
         /// 取染台待染轴信息
         /// </summary>
         /// <param name="machinetype">缸型</param>
         /// <returns></returns>
-        [Route("GetDaiRanZhouInfo"),HttpGet]
+        [Route("GetDaiRanZhouInfo"), HttpGet]
         public IHttpActionResult GetDaiRanZhouInfo([FromUri] DaiRanZhouInfoBm bm)
         {
             try
@@ -51,9 +51,12 @@ namespace GewProductivityAppService.Service.Yd
             }
             catch (Exception e)
             {
-                return NotFound();
+                log.Error(e.Message);
+                return BadRequest();
             }
         }
+
+
         /// <summary>
         /// 绑定类型
         /// </summary>
@@ -79,26 +82,31 @@ namespace GewProductivityAppService.Service.Yd
         [Route("SendTaskByYd"), HttpPost]
         public IHttpActionResult SendTaskByYd([FromBody]SendTaskBm bm)
         {
+
             try
             {
                 DateTime predictInBatchTime;
+                int tianIndex = bm.predictInBatchTime.IndexOf("天", StringComparison.Ordinal);
+                int dianIndex = bm.predictInBatchTime.IndexOf("点", StringComparison.Ordinal);
+                int fenIndex = bm.predictInBatchTime.IndexOf("分", StringComparison.Ordinal);
                 if (bm.predictInBatchTime.Contains("今天"))
                 {
-                    predictInBatchTime = (DateTime.Today.ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                    predictInBatchTime = (DateTime.Today.ToShortDateString() + " " + bm.predictInBatchTime.Substring(tianIndex + 1, dianIndex - tianIndex - 1) + ":" + bm.predictInBatchTime.Substring(dianIndex + 1, fenIndex - dianIndex - 1)).AsDateTime();
                 }
                 else if (bm.predictInBatchTime.Contains("明天"))
                 {
-                    predictInBatchTime = (DateTime.Today.AddDays(1).ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                    predictInBatchTime = (DateTime.Today.AddDays(1).ToShortDateString() + " " + bm.predictInBatchTime.Substring(tianIndex + 1, dianIndex - tianIndex - 1) + ":" + bm.predictInBatchTime.Substring(dianIndex + 1, fenIndex - dianIndex - 1)).AsDateTime();
                 }
                 else if (bm.predictInBatchTime.Contains("后天"))
                 {
-                    predictInBatchTime = (DateTime.Today.AddDays(2).ToShortDateString() + " " + bm.predictInBatchTime.Substring(2, 2) + ":" + bm.predictInBatchTime.Substring(5, 2)).AsDateTime();
+                    predictInBatchTime = (DateTime.Today.AddDays(2).ToShortDateString() + " " + bm.predictInBatchTime.Substring(tianIndex + 1, dianIndex - tianIndex - 1) + ":" + bm.predictInBatchTime.Substring(dianIndex + 1, fenIndex - dianIndex - 1)).AsDateTime();
                 }
                 else
                 {
                     return BadRequest();
                 }
-                ydmDb.prdSongZhouinfoes.Add(new prdSongZhouinfo()
+
+                ydmDb.prdSongZhouinfoes.Add(new prdSongZhouInfo()
                 {
                     machinetype = bm.machinetype,
                     batchno = bm.batchno,
@@ -108,11 +116,14 @@ namespace GewProductivityAppService.Service.Yd
                     ydoperattime = DateTime.Now,
                     PredictInBatchTime = predictInBatchTime
                 });
-                ydmDb.ydBatchTraces.Where(t => t.Batch_NO.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
+                ydmDb.ydBatchTraces
+                    .Where(t => t.Batch_NO.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
                     .Update(z => new ydBatchTrace()
                     {
                         IsSongZhou = "Y"
                     });
+
+
                 ydmDb.SaveChanges();
                 PushHub.Instance.PushYdDaiSongZhouInfo();
                 return Ok();
@@ -125,6 +136,50 @@ namespace GewProductivityAppService.Service.Yd
             }
         }
 
+        public class PostBm
+        {
+            public string param1 { get; set; }
+            public string param2 { get; set; }
+
+        }
+        /// <summary>
+        /// 测试POST请求
+        /// </summary>
+        /// <param name="bm"></param>
+        /// <returns></returns>
+        [Route("PostTest"), HttpPost]
+        public IHttpActionResult PostTest([FromBody] PostBm bm)
+        {
+            Stream resStream = HttpContext.Current.Request.InputStream;
+            StreamReader sr = new StreamReader(resStream, System.Text.Encoding.Default);
+            Console.WriteLine(sr.ToString());
+
+            log.Debug(sr.ToString());
+            return Ok();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public class GetBm
+        {
+            public string param1 { get; set; }
+            public string param2 { get; set; }
+        }
+        /// <summary>
+        /// 测试GET请求
+        /// </summary>
+        /// <param name="bm"></param>
+        /// <returns></returns>
+        [Route("GetTest"), HttpGet]
+        public IHttpActionResult GetTest([FromUri] GetBm bm)
+        {
+            Stream resStream = HttpContext.Current.Request.InputStream;
+            StreamReader sr = new StreamReader(resStream, System.Text.Encoding.Default);
+            Console.WriteLine(sr.ToString());
+            log.Debug(sr.ToString());
+            return Ok();
+        }
+
         /// <summary>
         /// 准备工人查询待送的轴
         /// </summary>
@@ -132,7 +187,7 @@ namespace GewProductivityAppService.Service.Yd
         [Route("GetDaiSongZhouInfo"), HttpGet]
         public IHttpActionResult GetDaiSongZhouInfo()
         {
-            var rtn = ydmDb.prdSongZhouinfoes.Where(z => z.properattime==null).Select(z => new { z.machinetype, z.batchno, z.nums, z.plantime }).OrderBy(z => z.plantime).ToList();
+            var rtn = ydmDb.prdSongZhouinfoes.Where(z => z.properattime == null).OrderBy(z => z.PredictInBatchTime).ToList();
             return Json(rtn);
         }
 
@@ -154,8 +209,9 @@ namespace GewProductivityAppService.Service.Yd
         {
             try
             {
-                ydmDb.prdSongZhouinfoes.Where(z => z.batchno.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
-                    .Update(z=>new prdSongZhouinfo()
+                ydmDb.prdSongZhouinfoes
+                    .Where(z => z.batchno.Equals(bm.batchno, StringComparison.CurrentCultureIgnoreCase))
+                    .Update(z => new prdSongZhouInfo()
                     {
                         properator = bm.properator,
                         properattime = DateTime.Now,

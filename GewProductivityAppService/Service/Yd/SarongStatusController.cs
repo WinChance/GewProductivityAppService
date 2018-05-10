@@ -111,7 +111,11 @@ map.put("yieldtype",inputyiedtype.getText().toString());
         [HttpPut]
         public IHttpActionResult UnLoadSarong([FromUri]string batchNo)
         {
-            string sarongNo = YdmDb.rtProductions.Where(p => p.Batch_NO.Equals(batchNo, StringComparison.CurrentCultureIgnoreCase) && p.Type.Equals("装笼")).OrderByDescending(p=>p.Input_Time).Select(p => p.Sarong_No).FirstOrDefault();
+            string sarongNo = YdmDb.rtProductions
+                .Where(p => p.Batch_NO.Equals(batchNo, StringComparison.CurrentCultureIgnoreCase) && p.Type.Equals("装笼"))
+                .OrderByDescending(p=>p.Input_Time)
+                .Select(p => p.Sarong_No)
+                .FirstOrDefault();
             if (sarongNo.IsNullOrWhiteSpace())
             {
                 return BadRequest();
