@@ -60,6 +60,7 @@ namespace GewProductivityAppService.Service.Fn
             }
             catch (Exception e)
             {
+                log.Error(e.Message);
                 return BadRequest();
                 throw;
             }
@@ -107,8 +108,9 @@ namespace GewProductivityAppService.Service.Fn
                     };
                 return responseMessage;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                log.Error(e.Message);
                 throw;
             }
         }
@@ -143,8 +145,9 @@ namespace GewProductivityAppService.Service.Fn
                     paramArray.ToArray());
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                log.Error(e.Message);
                 return BadRequest();
                 throw;
             }
@@ -185,6 +188,7 @@ namespace GewProductivityAppService.Service.Fn
                 {
                     Content = new StringContent(e.Message)
                 };
+                log.Error(e.Message);
                 throw new HttpResponseException(resp);
             }
         }

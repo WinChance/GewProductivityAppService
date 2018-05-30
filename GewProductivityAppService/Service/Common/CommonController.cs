@@ -14,6 +14,7 @@ using System.Web.Http;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models;
 using GewProductivityAppService.Models.Common;
+using log4net;
 
 namespace GewProductivityAppService.Service.Common
 {
@@ -24,6 +25,8 @@ namespace GewProductivityAppService.Service.Common
     public class CommonController : ApiController
     {
         private YdmDbContext YdmDb = new YdmDbContext();
+        private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// 根据不同的参数获取下拉列表的值。
         /// 1.返回穿综姓名：fun(GetHlProductionStaffs_Name,班别)；
@@ -64,15 +67,14 @@ namespace GewProductivityAppService.Service.Common
                 }
                 else
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                log.Error(e.Message);
                 throw;
             }
-            return NotFound();
         }
         /// <summary>
         /// 传入多参数查询，返回单个值
@@ -120,6 +122,7 @@ namespace GewProductivityAppService.Service.Common
                     Content = new StringContent(e.Message + singleString + uspParams.type + uspParams.param2),
                     ReasonPhrase = "存储过程异常"
                 };
+                log.Error(e.Message);
                 throw new HttpResponseException(resp);
             }
         }
@@ -159,6 +162,7 @@ namespace GewProductivityAppService.Service.Common
                     Content = new StringContent(e.Message),
                     ReasonPhrase = "存储过程异常"
                 };
+                log.Error(e.Message);
                 throw new HttpResponseException(resp);
             }
         }
@@ -284,8 +288,11 @@ namespace GewProductivityAppService.Service.Common
         }
         protected override void Dispose(bool disposing)
         {
-            
-            YdmDb.Dispose();
+
+            if (disposing)
+            {
+                YdmDb.Dispose();
+            }
             base.Dispose(disposing);
         }
     }
