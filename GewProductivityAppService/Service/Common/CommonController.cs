@@ -11,9 +11,11 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Web.Http;
+using GewProductivityAppService.DAL.MIS01.FNMDB;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models;
 using GewProductivityAppService.Models.Common;
+using GewProductivityAppService.Utils;
 using log4net;
 
 namespace GewProductivityAppService.Service.Common
@@ -24,6 +26,7 @@ namespace GewProductivityAppService.Service.Common
     [RoutePrefix("api/Common")]
     public class CommonController : ApiController
     {
+        private FnmDbContext fnmDb = new FnmDbContext();
         private YdmDbContext YdmDb = new YdmDbContext();
         private static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -161,6 +164,46 @@ namespace GewProductivityAppService.Service.Common
                 {
                     Content = new StringContent(e.Message),
                     ReasonPhrase = "存储过程异常"
+                };
+                log.Error(e.Message);
+                throw new HttpResponseException(resp);
+            }
+        }
+
+        /// <summary>
+        /// FNMDB通用查询，返回任意数据集
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        [Route("FnGeneralQuery")]
+        [HttpGet]
+        public IHttpActionResult FnGeneralQuery([FromUri] GeneralQueryBm p)
+        {
+            foreach (var _uspParam in p.GetType().GetProperties())
+            {
+                if (_uspParam.GetValue(p) == null)
+                {
+                    _uspParam.SetValue(p, "");
+                }
+            }
+          
+            List<SqlParameter> paramArray = new List<SqlParameter>();
+            paramArray.Add(new SqlParameter("@type", p.type));
+            paramArray.Add(new SqlParameter("@param2", p.param2));
+            paramArray.Add(new SqlParameter("@param3", p.param3));
+            paramArray.Add(new SqlParameter("@param4", p.param4));
+            paramArray.Add(new SqlParameter("@param5", p.param5));
+
+            try
+            {
+                var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, "EXEC [dbo].[usp_prdFnGeneralQuery]  @type,@param2,@param3,@param4,@param5", paramArray.ToArray());
+                return Json(dynamicDbSet);
+            }
+            catch (Exception e)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(e.Message)
                 };
                 log.Error(e.Message);
                 throw new HttpResponseException(resp);

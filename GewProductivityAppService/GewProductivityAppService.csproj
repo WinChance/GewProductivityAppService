@@ -255,6 +255,7 @@
     <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBm.cs" />
     <Compile Include="Models\Wv\QiangDan\PushTarget.cs" />
     <Compile Include="Models\Yd\SongZhou\DaiSongZhouVm.cs" />
+    <Compile Include="Service\Fn\DingweiController.cs" />
     <Compile Include="Service\Fn\WuliuController.cs" />
     <Compile Include="Service\HomeController.cs" />
     <Compile Include="Service\Common\CommonController.cs" />
