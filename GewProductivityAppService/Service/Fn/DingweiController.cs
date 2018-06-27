@@ -81,12 +81,10 @@ SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
         public IHttpActionResult SaveCarInfo([FromUri] string fnCard, string carNo,string locationNo, string @operator)
         {
             List<SqlParameter> paramArray = new List<SqlParameter>();
-
             paramArray.Add(new SqlParameter("@sFNCard", fnCard));
             paramArray.Add(new SqlParameter("@sCarNO", carNo));
             paramArray.Add(new SqlParameter("@sRoll", locationNo));
             paramArray.Add(new SqlParameter("@sOperator", @operator));
-
             try
             {
                 fnmDb.Database.ExecuteSqlCommand(@"exec [dbo].[usp_fnSaveCarInfo] @sFNCard,@sCarNO,@sRoll,@sOperator,'',''",

@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.WebPages;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models.Yd.SarongStatus;
+using log4net;
 using Microsoft.Ajax.Utilities;
 using Z.EntityFramework.Plus;
 
@@ -19,6 +20,7 @@ namespace GewProductivityAppService.Service.Yd
     public class SarongStatusController : ApiController
     {
         private YdmDbContext YdmDb = new YdmDbContext();
+        private static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// 查询纱笼状态
@@ -88,8 +90,9 @@ map.put("yieldtype",inputyiedtype.getText().toString());
                 YdmDb.Database.ExecuteSqlCommand(@"EXEC dbo.usp_prdAppInputRtProduction @Type,@BatchNo ,@SarongNO ,@InputClass ,@Work_ID ,@Inputer_ID,@YieldNum,@Department,@PayType,@Way,@RtnStatus out",
                     paramArray.ToArray());
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                log.Error(e.Message);
                 throw;
             }
             int result = (int)paramArray[0].Value;
