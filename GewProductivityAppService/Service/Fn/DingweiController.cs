@@ -36,7 +36,7 @@ namespace GewProductivityAppService.Service.Fn
             paramArray.Add(new SqlParameter("@p1", currentDepartment));
             try
             {
-                var sqlText = 
+                var sqlText =
 @"
 declare  @tb_GetMachineTaskInfo table   --声明表变量
 (
@@ -49,15 +49,12 @@ Car_NO varchar(30),
 Operation_CHN VARCHAR(20),    --字段 必须和插入表变量里的数量一一对应
 Plan_Time DATETIME
 )
-
 INSERT INTO  @tb_GetMachineTaskInfo  EXEC dbo.usp_prdGetMachineTaskInfo @Machine_ID = @p0, -- varchar(10)
 @Current_Department = @p1, -- varchar(10)
 @Flag = 'Y' -- varchar(1)
-
 SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
        Plan_Time,FNMDB.dbo.udf_GetExOperationChn(FN_Card) AS ExOperation_CHN FROM @tb_GetMachineTaskInfo
 ";
-
                 var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, sqlText, paramArray.ToArray());
                 return Json(dynamicDbSet);
             }

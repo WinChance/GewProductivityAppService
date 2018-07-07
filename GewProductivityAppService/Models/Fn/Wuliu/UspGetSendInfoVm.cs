@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace GewProductivityAppService.DAL.MIS01.FNMDB
+﻿namespace GewProductivityAppService.Models.Fn.Wuliu
 {
     /// <summary>
     /// 存储过程返回实体
@@ -18,12 +13,15 @@ namespace GewProductivityAppService.DAL.MIS01.FNMDB
 
         public string GF_NO { get; set; }
 
-
         public string car_no { get; set; }
 
         public string sCode { get; set; }
 
         public string Current_Department { get; set; }
+
+        public string LocationNo { get; set; }
+        
+        public string ExOperation_CHN { get; set; }
 
     }
 }
