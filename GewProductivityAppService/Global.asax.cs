@@ -4,7 +4,10 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GewProductivityAppService.Service.Quartz;
+using GewProductivityAppService.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace GewProductivityAppService
 {
@@ -24,6 +27,7 @@ namespace GewProductivityAppService
             
             QiangDanPushJobScheduler.Start();
             Yd2PrShouSongZhouPushJobScheduler.Start();
+
 
         }
 

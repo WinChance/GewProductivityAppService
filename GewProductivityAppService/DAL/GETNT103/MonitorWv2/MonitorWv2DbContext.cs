@@ -1,10 +1,7 @@
-namespace GewProductivityAppService.DAL.GETNT103
-{
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
+using System.Data.Entity;
 
+namespace GewProductivityAppService.DAL.GETNT103.MonitorWv2
+{
     public partial class MonitorWv2DbContext : DbContext
     {
         public MonitorWv2DbContext()

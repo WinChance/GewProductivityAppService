@@ -1,4 +1,4 @@
-﻿namespace GewProductivityAppService.Models.Wv.VieTask
+﻿namespace GewProductivityAppService.Models.Wv.QiangDan
 {
     public class OrderInfo
     {

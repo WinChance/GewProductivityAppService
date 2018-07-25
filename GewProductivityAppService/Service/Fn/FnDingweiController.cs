@@ -4,9 +4,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using GewProductivityAppService.DAL.MIS01.FNMDB;
+using GewProductivityAppService.DAL.MIS01.PDMDB;
 using GewProductivityAppService.Utils;
 using log4net;
 
@@ -15,8 +16,8 @@ namespace GewProductivityAppService.Service.Fn
     /// <summary>
     /// 找布及修改车卷号的需求
     /// </summary>
-    [RoutePrefix("api/Fn")]
-    public class DingweiController : ApiController
+    [RoutePrefix("api/FnDingwei")]
+    public class FnDingweiController : ApiController
     {
         private FnmDbContext fnmDb = new FnmDbContext();
         private static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -56,7 +57,7 @@ SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
        Plan_Time,FNMDB.dbo.udf_GetExOperationChn(FN_Card) AS ExOperation_CHN FROM @tb_GetMachineTaskInfo
 ";
                 var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, sqlText, paramArray.ToArray());
-                return Json(dynamicDbSet);
+                return Json(dynamicDbSet,JsonFormatSettings.Instance.GetSettings());
             }
             catch (Exception e)
             {
@@ -75,7 +76,7 @@ SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
         /// <returns></returns>
         [Route("SaveCarInfo")]
         [HttpGet]
-        public IHttpActionResult SaveCarInfo([FromUri] string fnCard, string carNo,string locationNo, string @operator)
+        public IHttpActionResult SaveCarInfo([FromUri] string fnCard, string carNo, string locationNo, string @operator)
         {
             List<SqlParameter> paramArray = new List<SqlParameter>();
             paramArray.Add(new SqlParameter("@sFNCard", fnCard));
@@ -95,5 +96,6 @@ SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
             }
         }
 
+        
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using GewProductivityAppService.Service.SignalR;
+﻿using GewProductivityAppService.Service.SignalR;
 using Quartz;
 
 namespace GewProductivityAppService.Service.Quartz

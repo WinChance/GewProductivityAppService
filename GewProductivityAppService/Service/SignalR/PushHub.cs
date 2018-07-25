@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GewProductivityAppService.DAL.GETNT103;
+using GewProductivityAppService.DAL.GETNT103.MonitorWv2;
 using GewProductivityAppService.DAL.GETNT62.GewPrdAppDB;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models.Wv.QiangDan;

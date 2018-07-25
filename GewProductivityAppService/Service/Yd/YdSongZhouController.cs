@@ -16,8 +16,8 @@ namespace GewProductivityAppService.Service.Yd
     /// <summary>
     /// 染纱与准备收送轴APP
     /// </summary>
-    [RoutePrefix("api/Yd")]
-    public class SongZhouController : ApiController
+    [RoutePrefix("api/YdSongZhou")]
+    public class YdSongZhouController : ApiController
     {
 
         private YdmDbContext ydmDb = new YdmDbContext();
@@ -134,50 +134,6 @@ namespace GewProductivityAppService.Service.Yd
                 return BadRequest();
                 throw;
             }
-        }
-
-        public class PostBm
-        {
-            public string param1 { get; set; }
-            public string param2 { get; set; }
-
-        }
-        /// <summary>
-        /// 测试POST请求
-        /// </summary>
-        /// <param name="bm"></param>
-        /// <returns></returns>
-        [Route("PostTest"), HttpPost]
-        public IHttpActionResult PostTest([FromBody] PostBm bm)
-        {
-            Stream resStream = HttpContext.Current.Request.InputStream;
-            StreamReader sr = new StreamReader(resStream, System.Text.Encoding.Default);
-            Console.WriteLine(sr.ToString());
-
-            log.Debug(sr.ToString());
-            return Ok();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public class GetBm
-        {
-            public string param1 { get; set; }
-            public string param2 { get; set; }
-        }
-        /// <summary>
-        /// 测试GET请求
-        /// </summary>
-        /// <param name="bm"></param>
-        /// <returns></returns>
-        [Route("GetTest"), HttpGet]
-        public IHttpActionResult GetTest([FromUri] GetBm bm)
-        {
-            Stream resStream = HttpContext.Current.Request.InputStream;
-            StreamReader sr = new StreamReader(resStream, System.Text.Encoding.Default);
-            Console.WriteLine(sr.ToString());
-            log.Debug(sr.ToString());
-            return Ok();
         }
 
         /// <summary>

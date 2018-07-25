@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DAL\MIS01\PDMDB\temp\" />
     <Folder Include="DAL\MIS01\YDMDB\Temp\" />
     <Folder Include="Service\Wv\" />
   </ItemGroup>
@@ -248,6 +249,7 @@
     <Compile Include="DAL\MIS01\FNMDB\fnHold.cs" />
     <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
     <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
+    <Compile Include="DAL\MIS01\PDMDB\tdPatternPicture.cs" />
     <Compile Include="DAL\MIS01\YDMDB\prdSongZhouInfo.cs" />
     <Compile Include="DAL\MIS01\YDMDB\ydBatchTrace.cs" />
     <Compile Include="Models\Fn\Wuliu\UspGetSendInfoVm.cs" />
@@ -255,8 +257,9 @@
     <Compile Include="Models\Fn\Wuliu\SaveReceiveInfoBm.cs" />
     <Compile Include="Models\Wv\QiangDan\PushTarget.cs" />
     <Compile Include="Models\Yd\SongZhou\DaiSongZhouVm.cs" />
-    <Compile Include="Service\Fn\DingweiController.cs" />
-    <Compile Include="Service\Fn\WuliuController.cs" />
+    <Compile Include="Service\Fn\FnDingweiController.cs" />
+    <Compile Include="Service\Fn\FnCommomController.cs" />
+    <Compile Include="Service\Fn\FnWuliuController.cs" />
     <Compile Include="Service\HomeController.cs" />
     <Compile Include="Service\Common\CommonController.cs" />
     <Compile Include="Service\Pr\AbandonYarnController.cs" />
@@ -295,9 +298,11 @@
     <Compile Include="Models\Tech\HlChuanzongOutput\HlOutputBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\RtProductionBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\SarongStatusViewModel.cs" />
-    <Compile Include="Service\Yd\SongZhouController.cs" />
+    <Compile Include="Service\Yd\YdSongZhouController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\DynamicSqlQueryClass.cs" />
+    <Compile Include="Utils\JsonFormatSettings.cs" />
+    <Compile Include="Utils\NullToEmptyStringResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
