@@ -106,15 +106,6 @@ namespace GewProductivityAppService.Service.Fn
             }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-
-            if (disposing)
-            {
-                fnmDb.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         /// <summary>
         /// 根据卡号，返回CAD图片
@@ -145,6 +136,16 @@ namespace GewProductivityAppService.Service.Fn
                 log.Error(e.Message);
                 throw;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+
+            if (disposing)
+            {
+                fnmDb.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
