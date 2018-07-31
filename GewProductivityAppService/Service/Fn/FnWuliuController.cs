@@ -68,88 +68,30 @@ namespace GewProductivityAppService.Service.Fn
             }
 
         }
+
         /// <summary>
-        ///// 保存送布信息
-        ///// </summary>
-        ///// <param name="fnCardList"></param>
-        ///// <param name="destination"></param>
-        ///// <param name="currentDepartment"></param>
-        ///// <param name="operators"></param>
-        ///// <returns></returns>
-        //[Route("FnSaveSendInfo")]
-        //[HttpGet]
-        //public HttpResponseMessage FnSaveSendInfo([FromUri]string fnCardList, string destination, string currentDepartment, string operators)
-        //{
-
-        //    List<SqlParameter> paramArray = new List<SqlParameter>();
-
-        //    paramArray.Add(new SqlParameter("@FNCardList", fnCardList));
-        //    paramArray.Add(new SqlParameter("@Destination", destination));
-        //    paramArray.Add(new SqlParameter("@Current_Department", currentDepartment));
-        //    paramArray.Add(new SqlParameter("@Operators", operators));
-        //    SqlParameter rtnNote_NO = new SqlParameter("@Note_NO", SqlDbType.Char, 12);
-        //    rtnNote_NO.Direction = ParameterDirection.Output;
-        //    paramArray.Add(rtnNote_NO);
-        //    try
-        //    {
-        //        fnmDb.Database.ExecuteSqlCommand(@"exec usp_SaveSendInfo @FNCardList,@Destination ,@Current_Department ,@Operators ,@Note_NO OUTPUT",
-        //            paramArray.ToArray());
-
-        //        var result = Convert.ToString(paramArray[4].Value);
-
-        //        HttpResponseMessage responseMessage =
-        //            new HttpResponseMessage
-        //            {
-        //                Content =
-        //                    new StringContent(result, Encoding.GetEncoding("UTF-8"),
-        //                        "text/plain")
-        //            };
-        //        return responseMessage;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        log.Error(e.Message);
-        //        throw;
-        //    }
-        //}
-        ///// <summary>
-        ///// 保存收布信息
-        ///// </summary>
-        ///// <param name="p"></param>
-        ///// <returns></returns>
-        //[Route("FnSaveReceiveInfo")]
-        //[HttpGet]
-        //public IHttpActionResult FnSaveReceiveInfo([FromUri]SaveReceiveInfoBm p)
-        //{
-        //    foreach (var _uspParam in p.GetType().GetProperties())
-        //    {
-        //        if (_uspParam.GetValue(p) == null)
-        //        {
-        //            _uspParam.SetValue(p, "");
-        //        }
-        //    }
-        //    List<SqlParameter> paramArray = new List<SqlParameter>();
-
-        //    paramArray.Add(new SqlParameter("@Note_NO", p.Note_NO));
-        //    paramArray.Add(new SqlParameter("@Destination", p.Destination));
-        //    paramArray.Add(new SqlParameter("@Operator", p.Operator));
-        //    paramArray.Add(new SqlParameter("@Type", p.Type));
-        //    paramArray.Add(new SqlParameter("@sNewCarNo", p.sNewCarNo));
-        //    paramArray.Add(new SqlParameter("@sNewLocationNo", p.sNewLocationNo));
-
-        //    try
-        //    {
-        //        fnmDb.Database.ExecuteSqlCommand(@"exec [dbo].[usp_SaveReceiveInfo] @Note_NO,@Destination ,@Operator ,@Type ,@sNewCarNo,@sNewLocationNo",
-        //            paramArray.ToArray());
-        //        return Ok();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        log.Error(e.Message);
-        //        return BadRequest();
-        //        throw;
-        //    }
-        //}
+        /// 发送邮件通知相关人员
+        /// </summary>
+        /// <param name="fnCard"></param>
+        /// <returns></returns>
+        [Route("SendEmailCannotFindFabric")]
+        [HttpGet]
+        public IHttpActionResult SendEmailCannotFindFabric([FromUri] string fnCard)
+        {
+            List<SqlParameter> paramArray = new List<SqlParameter>();
+            paramArray.Add(new SqlParameter("@sFNCard", fnCard));
+            try
+            {
+                fnmDb.Database.ExecuteSqlCommand(@"exec dbo.usp_prdSendEmailCannotFindFabric @sFNCard",
+                    paramArray.ToArray());
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                return BadRequest();
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {

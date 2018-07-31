@@ -53,7 +53,7 @@ Plan_Time DATETIME
 INSERT INTO  @tb_GetMachineTaskInfo  EXEC dbo.usp_prdGetMachineTaskInfo @Machine_ID = @p0, -- varchar(10)
 @Current_Department = @p1, -- varchar(10)
 @Flag = 'Y' -- varchar(1)
-SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
+SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,FNMDB.dbo.udf_GetCardHolders(FN_Card) as Holder,
        Plan_Time,FNMDB.dbo.udf_GetExOperationChn(FN_Card) AS ExOperation_CHN FROM @tb_GetMachineTaskInfo
 ";
                 var dynamicDbSet = DynamicSqlQueryClass.Instance.DynamicSqlQuery(fnmDb.Database, sqlText, paramArray.ToArray());
@@ -95,7 +95,5 @@ SELECT FN_Card, Quantity, GF_NO, LocationNO, RfidCarNo, Car_NO, Operation_CHN,
                 return BadRequest();
             }
         }
-
-        
     }
 }
