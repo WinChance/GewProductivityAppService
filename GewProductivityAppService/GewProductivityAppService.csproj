@@ -298,6 +298,7 @@
     <Compile Include="Models\Tech\HlChuanzongOutput\HlOutputBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\RtProductionBindModel.cs" />
     <Compile Include="Models\Yd\SarongStatus\SarongStatusViewModel.cs" />
+    <Compile Include="Service\Yd\YdCommonController.cs" />
     <Compile Include="Service\Yd\YdSongZhouController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\DynamicSqlQueryClass.cs" />
