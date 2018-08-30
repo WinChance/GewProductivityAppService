@@ -303,3 +303,5 @@ __pycache__/
 lib/
 GewProductivityAppService/Scripts/kendo
 GewProductivityAppService/Content
+GewProductivityAppService/Web.config
+GewProductivityAppService/Web.Release.config
