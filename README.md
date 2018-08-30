@@ -1,3 +1,2 @@
 # GewProductivityAppService
-GewProductivityAppService后台
-此项目为公司项目
+GewProductivityAppService
