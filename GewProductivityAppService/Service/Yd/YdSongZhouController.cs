@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.WebPages;
@@ -152,7 +156,6 @@ namespace GewProductivityAppService.Service.Yd
             public string batchno { get; set; }
             public string properator { get; set; }
             public string location { get; set; }
-
         }
         /// <summary>
         /// 准备拉轴工确认拉轴
@@ -175,6 +178,103 @@ namespace GewProductivityAppService.Service.Yd
                     });
                 ydmDb.SaveChanges();
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                return BadRequest();
+            }
+        }
+
+        public class ZhuangzhouYieldInputBm
+        {
+            /// <summary>
+            /// 纱笼号
+            /// </summary>
+            public string sarongId { get; set; }
+            /// <summary>
+            /// 缸号
+            /// </summary>
+            public string batchNo { get; set; }
+            /// <summary>
+            /// 卡号
+            /// </summary>
+            public string cardNo { get; set; }
+
+        }
+
+        /// <summary>
+        /// 装轴产量录入
+        /// </summary>
+        /// <param name="bm"></param>
+        /// <returns></returns>
+        [Route("ZhuangzhouYieldInput"), HttpPost]
+        public IHttpActionResult ZhuangzhouYieldInput([FromBody] ZhuangzhouYieldInputBm bm)
+        {
+            List<SqlParameter> paramArray = new List<SqlParameter>();
+            paramArray.Add(new SqlParameter("@SarongId", bm.sarongId));
+            paramArray.Add(new SqlParameter("@BatchNo", bm.batchNo));
+            paramArray.Add(new SqlParameter("@CardNo", bm.cardNo));
+            try
+            {
+                ydmDb.Database.ExecuteSqlCommand(@"EXEC [dbo].[usp_prdZhuangzhouYieldInput] @SarongId,@BatchNo,@CardNo",
+                    paramArray.ToArray());
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+                return BadRequest();
+            }
+        }
+
+        public class LazhouYieldInputBm
+        {
+            /// <summary>
+            /// 缸号
+            /// </summary>
+            public string batchNo { get; set; }
+            /// <summary>
+            /// 卡号
+            /// </summary>
+            public string cardNo { get; set; }
+            /// <summary>
+            /// 地位号
+            /// </summary>
+            public string location { get; set; }
+
+        }
+
+        /// <summary>
+        /// 拉轴产量录入
+        /// </summary>
+        /// <param name="bm"></param>
+        /// <returns></returns>
+        [Route("LazhouYieldInput"), HttpPost]
+        public IHttpActionResult LazhouYieldInput([FromBody] LazhouYieldInputBm bm)
+        {
+            List<SqlParameter> paramArray = new List<SqlParameter>();
+            paramArray.Add(new SqlParameter("@BatchNo", bm.batchNo));
+            paramArray.Add(new SqlParameter("@CardNo", bm.cardNo));
+            paramArray.Add(new SqlParameter("@Location", bm.location));
+            try
+            {
+                ydmDb.Database.ExecuteSqlCommand(@"EXEC [dbo].[usp_prdLazhouYieldInput] @BatchNo,@CardNo,@Location",
+                    paramArray.ToArray());
+                return Ok();
+            }
+            catch (SqlException ex)
+            {
+                log.Error(ex.Message);
+                //在webapi中要想抛出异常必须这样抛出，否则之抛出一个默认500的异常
+
+                var resp = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(
+                        ex.Message.Replace(@"EXECUTE 后的事务计数指示 BEGIN 和 COMMIT 语句的数目不匹配。上一计数 = 1，当前计数 = 0。", "")),
+                    ReasonPhrase = "error"
+                };
+                throw new HttpResponseException(resp);
             }
             catch (Exception e)
             {

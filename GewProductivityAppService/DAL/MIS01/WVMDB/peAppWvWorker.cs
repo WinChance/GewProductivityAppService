@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GewProductivityAppService.DAL.GETNT62.GewPrdAppDB
+namespace GewProductivityAppService.DAL.MIS01.WVMDB
 {
     [Table("peAppWvWorker")]
     public partial class peAppWvWorker

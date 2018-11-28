@@ -12,7 +12,7 @@ namespace GewProductivityAppService.Service.Quartz
             IJobDetail job = JobBuilder.Create<Yd2PrShouSongZhouPushJob>().Build();//创建一个作业
             ITrigger trigger = TriggerBuilder.Create()
                 .WithSimpleSchedule(t =>
-                    t.WithIntervalInSeconds(1800) //触发执行，半小时一次
+                    t.WithIntervalInSeconds(300) //触发执行，5分钟一次
                         .RepeatForever())          //重复执行
                 .Build();
             scheduler.ScheduleJob(job, trigger);       //把作业，触发器加入调度器。 

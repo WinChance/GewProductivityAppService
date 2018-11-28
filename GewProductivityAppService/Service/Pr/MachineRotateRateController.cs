@@ -22,7 +22,7 @@ namespace GewProductivityAppService.Service.Pr
         [HttpPost]
         public IHttpActionResult AddMachineRotateRate([FromBody] MachineRotateRateBindModel bm)
         {
-            if (bm == null)
+            if (bm == null || bm.End.Equals(0))
             {
                 return BadRequest();
             }

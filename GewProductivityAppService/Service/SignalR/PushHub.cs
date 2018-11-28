@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GewProductivityAppService.DAL.GETNT103.MonitorWv2;
 using GewProductivityAppService.DAL.GETNT62.GewPrdAppDB;
+using GewProductivityAppService.DAL.MIS01.WVMDB;
 using GewProductivityAppService.DAL.MIS01.YDMDB;
 using GewProductivityAppService.Models.Wv.QiangDan;
 using Microsoft.AspNet.SignalR;
@@ -119,7 +120,7 @@ namespace GewProductivityAppService.Service.SignalR
             {
                 // 调用客户端的方法，在消息栏显示消息
                 GlobalHost.ConnectionManager.GetHubContext<PushHub>().Clients.Clients(pushTarget.ConnectIds)
-                    .receivePushFromServer("您有 "+pushTarget.Msg + " 个可抢！","");
+                    .receivePushFromServer("您有 "+pushTarget.Msg + " 个单可抢！","");
             }
         }
 
@@ -131,23 +132,31 @@ namespace GewProductivityAppService.Service.SignalR
         /// <param name="taskStatus"></param>
         /// <param name="deptId"></param>
         /// <returns></returns>
-        public PushTarget QiangDanPushTarget(string subDept, string remark, int taskStatus, int deptId)
+         public PushTarget QiangDanPushTarget(string subDept, string remark, int taskStatus, int deptId)
         {
             IList<string> conId = new List<string>();
             int undoTasks = 0;
             using (MonitorWv2DbContext monitorWv2Db = new MonitorWv2DbContext())
             using (PrdAppDbContext prdAppDb = new PrdAppDbContext())
+            using (WvmDbContext wvmDb = new WvmDbContext())
             {
                 if (deptId < 1)
                 {
+                    // 增加Department筛选 18-11-28
                     undoTasks =
                         monitorWv2Db.QiangDanTasks.Count(
-                            t => (t.TaskStatus == taskStatus) && t.IsActive == true);
-                    var connectedUsers = prdAppDb.peAppWvUsers
-                        .Join(prdAppDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
-                        .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark))
-                        .Select(t => t.u.ConnectionId).ToList();
-                    if (connectedUsers.Count > 0)
+                            t => (t.TaskStatus == taskStatus) && t.IsActive == true && t.Department.Equals(subDept));
+                    //var connectedUsers = prdAppDb.peAppWvUsers
+                    //    .Join(wvmDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                    //    .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark))
+                    //    .Select(t => t.u.ConnectionId).ToList();
+                    // 方式2
+                    var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
+                    var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark)).ToList();
+                    var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                        .Select(t => t.u.ConnectionId);
+
+                    if (connectedUsers.Any()&&undoTasks>0)
                     {
                         foreach (var u in connectedUsers)
                         {
@@ -161,11 +170,16 @@ namespace GewProductivityAppService.Service.SignalR
                     undoTasks = monitorWv2Db.Database.SqlQuery<int>(sqlText, deptId, subDept, taskStatus).Single();
                     if (deptId == 1)
                     {
-                        var connectedUsers = prdAppDb.peAppWvUsers
-                            .Join(prdAppDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
-                            .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark) && t.w.GroupName.Contains("西"))
-                            .Select(t => t.u.ConnectionId).ToList();
-                        if (connectedUsers.Count > 0)
+                        //var connectedUsers = prdAppDb.peAppWvUsers
+                        //    .Join(wvmDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                        //    .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark) && t.w.GroupName.Contains("西"))
+                        //    .Select(t => t.u.ConnectionId).ToList();
+
+                        var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
+                        var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark) && w.GroupName.Contains("西")).ToList();
+                        var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                            .Select(t => t.u.ConnectionId);
+                        if (connectedUsers.Any() &&undoTasks>0)
                         {
                             foreach (var u in connectedUsers)
                             {
@@ -175,11 +189,15 @@ namespace GewProductivityAppService.Service.SignalR
                     }
                     else
                     {
-                        var connectedUsers = prdAppDb.peAppWvUsers
-                            .Join(prdAppDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
-                            .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark) && t.w.GroupName.Contains("东"))
-                            .Select(t => t.u.ConnectionId).ToList();
-                        if (connectedUsers.Count > 0)
+                        //var connectedUsers = prdAppDb.peAppWvUsers
+                        //    .Join(wvmDb.peAppWvWorkers, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                        //    .Where(t => t.u.SubDept.Equals(subDept) && t.u.IsLogin == true && t.w.Remark.Equals(remark) && t.w.GroupName.Contains("东"))
+                        //    .Select(t => t.u.ConnectionId).ToList();
+                        var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
+                        var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark) && w.GroupName.Contains("东")).ToList();
+                        var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                            .Select(t => t.u.ConnectionId);
+                        if (connectedUsers.Any() && undoTasks > 0)
                         {
                             foreach (var u in connectedUsers)
                             {

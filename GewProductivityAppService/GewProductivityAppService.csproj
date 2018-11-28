@@ -198,7 +198,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="DAL\MIS01\PDMDB\temp\" />
-    <Folder Include="DAL\MIS01\YDMDB\Temp\" />
+    <Folder Include="DAL\MIS01\WVMDB\Temp\" />
     <Folder Include="Service\Wv\" />
   </ItemGroup>
   <ItemGroup>
@@ -244,12 +244,12 @@
     <Compile Include="DAL\GETNT103\MonitorWv2\QiangDanTask.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\peAppWvUser.cs" />
     <Compile Include="DAL\GETNT62\GewPrdAppDB\PrdAppDbContext.cs" />
-    <Compile Include="DAL\GETNT62\GewPrdAppDB\Temp\Model1.cs" />
-    <Compile Include="DAL\GETNT62\GewPrdAppDB\peAppWvWorker.cs" />
     <Compile Include="DAL\MIS01\FNMDB\fnHold.cs" />
     <Compile Include="DAL\MIS01\FNMDB\FnmDbContext.cs" />
     <Compile Include="DAL\MIS01\FNMDB\TestModel.cs" />
     <Compile Include="DAL\MIS01\PDMDB\tdPatternPicture.cs" />
+    <Compile Include="DAL\MIS01\WVMDB\peAppWvWorker.cs" />
+    <Compile Include="DAL\MIS01\YDMDB\Temp\Model1.cs" />
     <Compile Include="DAL\MIS01\YDMDB\prdSongZhouInfo.cs" />
     <Compile Include="DAL\MIS01\YDMDB\ydBatchTrace.cs" />
     <Compile Include="Models\Fn\Wuliu\UspGetSendInfoVm.cs" />

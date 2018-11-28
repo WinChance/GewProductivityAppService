@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GewProductivityAppService.DAL.MIS01.YDMDB
 {
     [Table("prdSongZhouInfo")]
-    public  class prdSongZhouInfo
+    public partial class prdSongZhouInfo
     {
         public int id { get; set; }
 
@@ -36,19 +36,9 @@ namespace GewProductivityAppService.DAL.MIS01.YDMDB
 
         public DateTime? PredictInBatchTime { get; set; }
 
-        [StringLength(2)]
-        public string WorkerClass { get; set; }
+        [StringLength(30)]
+        public string zhuangzhouop { get; set; }
 
-        [StringLength(10)]
-        public string Type { get; set; }
-
-        [StringLength(10)]
-        public string YdOperatorNo { get; set; }
-
-        [StringLength(10)]
-        public string PrOperatorNo { get; set; }
-
-        [StringLength(5)]
-        public string Factory { get; set; }
+        public DateTime? zhuangzhouot { get; set; }
     }
 }
