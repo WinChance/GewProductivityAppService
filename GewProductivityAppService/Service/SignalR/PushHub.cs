@@ -41,15 +41,15 @@ namespace GewProductivityAppService.Service.SignalR
         /// <returns></returns>
         public override Task OnDisconnected(bool stopCalled)
         {
-            using (PrdAppDbContext prdAppDb = new PrdAppDbContext())
-            {
-                var user = prdAppDb.peAppWvUsers.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
-                if (user != null)
-                {
-                    prdAppDb.peAppWvUsers.Where(u => u.ConnectionId == Context.ConnectionId).Update(u => new peAppWvUser() { ConnectionId = "", IsLogin = false });
-                    prdAppDb.SaveChanges();
-                }
-            }
+            //using (PrdAppDbContext prdAppDb = new PrdAppDbContext())
+            //{
+            //    var user = prdAppDb.peAppWvUsers.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            //    if (user != null)
+            //    {
+            //        prdAppDb.peAppWvUsers.Where(u => u.ConnectionId == Context.ConnectionId).Update(u => new peAppWvUser() { ConnectionId = "", IsLogin = false });
+            //        prdAppDb.SaveChanges();
+            //    }
+            //}
 
             return base.OnDisconnected(false);
         }
@@ -153,7 +153,7 @@ namespace GewProductivityAppService.Service.SignalR
                     // 方式2
                     var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
                     var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark)).ToList();
-                    var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                    var connectedUsers = userList.Join(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
                         .Select(t => t.u.ConnectionId);
 
                     if (connectedUsers.Any()&&undoTasks>0)
@@ -177,7 +177,7 @@ namespace GewProductivityAppService.Service.SignalR
 
                         var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
                         var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark) && w.GroupName.Contains("西")).ToList();
-                        var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                        var connectedUsers = userList.Join(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
                             .Select(t => t.u.ConnectionId);
                         if (connectedUsers.Any() &&undoTasks>0)
                         {
@@ -195,7 +195,7 @@ namespace GewProductivityAppService.Service.SignalR
                         //    .Select(t => t.u.ConnectionId).ToList();
                         var userList = prdAppDb.peAppWvUsers.Where(u => u.SubDept.Equals(subDept) && u.IsLogin == true).ToList();
                         var workerList = wvmDb.peAppWvWorkers.Where(w => w.Remark.Equals(remark) && w.GroupName.Contains("东")).ToList();
-                        var connectedUsers = userList.GroupJoin(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
+                        var connectedUsers = userList.Join(workerList, u => u.code, w => w.cardno, (u, w) => new { u, w })
                             .Select(t => t.u.ConnectionId);
                         if (connectedUsers.Any() && undoTasks > 0)
                         {
